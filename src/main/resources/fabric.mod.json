@@ -13,7 +13,7 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/libgenetics/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -34,7 +34,7 @@
     "minecraft": "~1.19",
     "java": ">=17"
   },
+  "accessWidener" : "libgenetics.accesswidener",
   "suggests": {
-    "another-mod": "*"
   }
 }
