@@ -14,15 +14,15 @@ repositories {
 ```
 dependencies {
 
-  ## libGenetics
+  // libGenetics
   modImplementation "com.github.diamonddevv:libgenetics:${project.libgenetics_version}"
   include "com.github.diamonddevv:libgenetics:${project.libgenetics_version}"
   
-  ## Fabric ASM, used by libGenetics
+  // Fabric ASM, used by libGenetics
   modImplementation "com.github.Chocohead:Fabric-ASM:${project.fasm_version}"
   include "com.github.Chocohead:Fabric-ASM:${project.fasm_version}"
   
-  ## Fabric API, used by libGenetics (You probably have this anyway)
+  // Fabric API, used by libGenetics (You probably have this anyway)
   modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
   
 }
