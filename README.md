@@ -1,6 +1,7 @@
 # libgenetics
 Minecraft Fabric/Quilt 1.19.x Library Mod, made by DiamondDev
 
+no guarantees this'll work yet
 
 # Add to Project
 ## Repository Block (`build.gradle`)
