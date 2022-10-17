@@ -1,6 +1,6 @@
-package net.diamonddev.libgenetics.enchantment.target;
+package net.diamonddev.libgenetics.common.api.v1.enchantment.target;
 
-import net.diamonddev.libgenetics.mixin.EnchantmentTargetMixin;
+import net.diamonddev.libgenetics.core.mixin.EnchantmentTargetMixin;
 import net.minecraft.item.Item;
 import net.minecraft.item.ShieldItem;
 

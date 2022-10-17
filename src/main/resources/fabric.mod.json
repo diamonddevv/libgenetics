@@ -18,10 +18,16 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.diamonddev.libgenetics.LibGeneticsMod"
+      "net.diamonddev.libgenetics.core.libGeneticsMod"
+    ],
+    "client": [
+      "net.diamonddev.libgenetics.client.libGeneticsClient"
+    ],
+    "server": [
+      "net.diamonddev.libgenetics.server.libGeneticsServer"
     ],
     "mm:early_risers": [
-      "net.diamonddev.libgenetics.asm.EarlyRiser"
+      "net.diamonddev.libgenetics.core.asm.EarlyRiser"
     ]
   },
   "mixins": [

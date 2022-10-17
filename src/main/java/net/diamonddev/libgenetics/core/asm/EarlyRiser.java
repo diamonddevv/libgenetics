@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.asm;
+package net.diamonddev.libgenetics.core.asm;
 import com.chocohead.mm.api.ClassTinkerers;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
@@ -11,9 +11,9 @@ public class EarlyRiser implements Runnable {
         String enchantTarget = remapper.mapClassName("intermediary", "net.minecraft.class_1886");
 
         ClassTinkerers.enumBuilder(enchantTarget)
-                .addEnumSubclass("ELYTRA", "net.diamonddev.libgenetics.enchantment.target.ElytraEnchantmentTarget").build();
+                .addEnumSubclass("ELYTRA", "net.diamonddev.libgenetics.common.api.v1.enchantment.target.ElytraEnchantmentTarget").build();
         ClassTinkerers.enumBuilder(enchantTarget)
-                .addEnumSubclass("SHIELD", "net.diamonddev.libgenetics.enchantment.target.ShieldEnchantmentTarget").build();
+                .addEnumSubclass("SHIELD", "net.diamonddev.libgenetics.common.api.v1.enchantment.target.ShieldEnchantmentTarget").build();
 
     }
 }

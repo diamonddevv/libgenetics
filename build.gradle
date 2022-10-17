@@ -31,11 +31,6 @@ dependencies {
 	// Fabric ASM. Used to inject to Enums, generally risky but useful to have for when it is required. jij'd.
 	modImplementation "com.github.Chocohead:Fabric-ASM:${project.asm_version}"
 	include "com.github.Chocohead:Fabric-ASM:${project.asm_version}"
-
-	// Uncomment the following line to enable the deprecated Fabric API modules. 
-	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
-
-	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
 }
 
 processResources {
@@ -78,5 +73,6 @@ publishing {
 		// Notice: This block does NOT have the same function as the block in the top level.
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
+		maven { url 'https://jitpack.io' }
 	}
 }

@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.mixin;
+package net.diamonddev.libgenetics.core.mixin;
 
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
