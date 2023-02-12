@@ -9,6 +9,6 @@ public abstract class NbtComponent<T> {
     public NbtComponent(String key) {
         this.key = key;
     }
-    abstract T read(NbtCompound nbt);
-    abstract void write(NbtCompound nbt, T data);
+    public abstract T read(NbtCompound nbt);
+    public abstract void write(NbtCompound nbt, T data);
 }
