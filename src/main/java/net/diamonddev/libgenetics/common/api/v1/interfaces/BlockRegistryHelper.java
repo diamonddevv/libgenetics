@@ -3,8 +3,9 @@ package net.diamonddev.libgenetics.common.api.v1.interfaces;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 
@@ -15,7 +16,7 @@ public interface BlockRegistryHelper {
         BlockItem bi = new BlockItem(block, settings);
 
         Registry.register(Registries.BLOCK, identifier, block);
-        Registry.register(Registries.ITEM, identifier, bi); //todo update mcver
+        Registry.register(Registries.ITEM, identifier, bi);
 
         hashedBlockItems.put(block, bi);
     }
