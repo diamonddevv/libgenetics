@@ -33,5 +33,5 @@ dependencies {
 ```
   fabric_version=0.60.0+1.19.2
   fasm_version = v2.3
-  libgenetics_version = 1.0.0
+  libgenetics_version = {version goes here}
  ```
