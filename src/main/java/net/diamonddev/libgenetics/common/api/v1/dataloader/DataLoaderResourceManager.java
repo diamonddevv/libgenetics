@@ -7,22 +7,35 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 public class DataLoaderResourceManager {
-    // CACHE
-    public static final KeyedArrayCache<DataLoaderResourceType, DataLoaderResource> CACHE = new KeyedArrayCache<>();
 
-    private static final HashMap<Identifier, DataLoaderResourceType> TYPES = new HashMap<>();
+    public DataLoaderResourceManager() {
 
-    ///
-    public static void registerType(DataLoaderResourceType type) {
-        TYPES.put(type.getId(), type);
     }
 
-    public static DataLoaderResourceType getType(Identifier typeId) {
+    // CACHE
+    public final KeyedArrayCache<DataLoaderResourceType, DataLoaderResource> CACHE = new KeyedArrayCache<>();
+
+    private final HashMap<Identifier, DataLoaderResourceType> TYPES = new HashMap<>();
+
+    ///
+    public void registerType(DataLoaderResourceType type) {
+        TYPES.put(type.getId(), type);
+    }
+    
+    public static void registerType(DataLoaderListener listener,DataLoaderResourceType type) {
+        listener.getManager().registerType(type);
+    }
+
+    public DataLoaderResourceType getType(Identifier typeId) {
         return TYPES.get(typeId);
     }
 
-    public static void forEachRecipe(DataLoaderResourceType recipeType, Consumer<DataLoaderResource> recipeConsumer) {
-        CACHE.get(recipeType).forEach(recipeConsumer);
+    public void forEachRecipe(DataLoaderResourceType type, Consumer<DataLoaderResource> consumer) {
+        CACHE.get(type).forEach(consumer);
+    }
+
+    public static void forEachRecipe(DataLoaderListener listener, DataLoaderResourceType type, Consumer<DataLoaderResource> consumer) {
+        listener.getManager().forEachRecipe(type, consumer);
     }
     //
     public static final String IDPARAM = "resource_type";

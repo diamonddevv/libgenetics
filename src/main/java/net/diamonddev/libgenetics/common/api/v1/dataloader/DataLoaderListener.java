@@ -23,11 +23,17 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
 
     private final Logger RESOURCE_MANAGER_LOGGER;
     private final String managerName;
+    private final DataLoaderResourceManager manager;
 
     public DataLoaderListener(String managerName) {
         this.managerName = managerName;
 
         RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "]");
+        this.manager = new DataLoaderResourceManager();
+    }
+
+    public DataLoaderResourceManager getManager() {
+        return this.manager;
     }
 
 
@@ -41,7 +47,7 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
     @Override
     public void reload(ResourceManager manager) {
         // Clear Cache
-        DataLoaderResourceManager.CACHE.clear();
+        this.getManager().CACHE.clear();
 
 
         // Read
@@ -54,7 +60,7 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
                     Identifier typeId = new Identifier(json.get(DataLoaderResourceManager.IDPARAM).getAsString());
 
                     // Read from Type
-                    DataLoaderResourceType type = DataLoaderResourceManager.getType(typeId);
+                    DataLoaderResourceType type = this.getManager().getType(typeId);
 
                     // Read JSON
                     DataLoaderResource resource = new DataLoaderResource(type, id);
@@ -65,7 +71,7 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
                     jsonKeys.forEach(s -> resource.getHash().put(s, json.get(s)));
 
                     // Add
-                    DataLoaderResourceManager.CACHE.getOrCreateKey(type).add(resource);
+                    this.getManager().CACHE.getOrCreateKey(type).add(resource);
 
                 } catch (Exception e) {
                     RESOURCE_MANAGER_LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
