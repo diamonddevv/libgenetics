@@ -23,9 +23,6 @@
     "client": [
       "net.diamonddev.libgenetics.client.GeneticsClient"
     ],
-    "server": [
-      "net.diamonddev.libgenetics.server.GeneticsServer"
-    ],
     "mm:early_risers": [
       "net.diamonddev.libgenetics.core.asm.EarlyRiser"
     ]

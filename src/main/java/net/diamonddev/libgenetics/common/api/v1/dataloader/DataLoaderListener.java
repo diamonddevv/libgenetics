@@ -3,8 +3,10 @@ package net.diamonddev.libgenetics.common.api.v1.dataloader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.diamonddev.libgenetics.core.GeneticsMod;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,12 +26,24 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
     private final Logger RESOURCE_MANAGER_LOGGER;
     private final String managerName;
     private final DataLoaderResourceManager manager;
+    private final String resourcePath;
 
     public DataLoaderListener(String managerName) {
+        this(managerName, managerName + "_data");
+    }
+    public DataLoaderListener(String managerName, String resourcePath) {
         this.managerName = managerName;
+        this.resourcePath = resourcePath;
 
         RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "]");
         this.manager = new DataLoaderResourceManager();
+    }
+
+    public static ArrayList<DataLoaderListener> listeners = new ArrayList<>();
+
+    public static void registerListener(DataLoaderListener listener) {
+        listeners.add(listener);
+        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(listener);
     }
 
     public DataLoaderResourceManager getManager() {
@@ -51,7 +65,7 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
 
 
         // Read
-        for (Identifier id : manager.findResources(managerName + "_data", path -> path.getPath().endsWith(".json")).keySet()) {
+        for (Identifier id : manager.findResources(resourcePath, path -> path.getPath().endsWith(".json")).keySet()) {
             if (manager.getResource(id).isPresent()) {
                 try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                     // Consume stream

@@ -1,0 +1,50 @@
+package net.diamonddev.libgenetics.core.command;
+
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderListener;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceManager;
+import net.diamonddev.libgenetics.core.command.abstraction.StringArrayListArgType;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class DataLoaderResourceManagerArgument extends StringArrayListArgType {
+
+    private static final DynamicCommandExceptionType INVALID_EXCEPTION =
+            new DynamicCommandExceptionType((id) -> Text.literal("Listener " + id + " was not found in register!"));
+
+    private DataLoaderResourceManagerArgument() {}
+    public static DataLoaderResourceManagerArgument resourceManager() {return new DataLoaderResourceManagerArgument();}
+
+    public static DataLoaderResourceManager getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
+        Collection<DataLoaderListener> listeners = DataLoaderListener.listeners;
+        String name = context.getArgument(argumentName, String.class);
+        DataLoaderResourceManager mgr = null;
+        for (DataLoaderListener listener : listeners) {
+            if (listener.getFabricId().toString().matches(name)) {
+                mgr = listener.getManager();
+            }
+        }
+
+        if (mgr == null) {
+            throw INVALID_EXCEPTION.create(name);
+        } else return mgr;
+    }
+    @Override
+    public ArrayList<String> getArray() {
+        return toArrList(DataLoaderListener.listeners.stream().map(DataLoaderResourceManagerArgument::remapListeners).toList());
+    }
+
+    private static String remapListeners(DataLoaderListener listener) {
+        return listener.getFabricId().toString();
+    }
+    private static <T> ArrayList<T> toArrList(Collection<T> collection) {
+        ArrayList<T> arr = new ArrayList<>();
+        arr.addAll(collection);
+        return arr;
+    }
+}
