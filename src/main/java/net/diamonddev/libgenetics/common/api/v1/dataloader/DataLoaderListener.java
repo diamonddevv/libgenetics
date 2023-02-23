@@ -27,13 +27,16 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
     private final String managerName;
     private final DataLoaderResourceManager manager;
     private final String resourcePath;
+    private final Identifier id;
 
-    public DataLoaderListener(String managerName) {
-        this(managerName, managerName + "_data");
+    public DataLoaderListener(String managerName, Identifier id) {
+        this(managerName, id, managerName + "_data");
     }
-    public DataLoaderListener(String managerName, String resourcePath) {
+    public DataLoaderListener(String managerName, Identifier id, String resourcePath) {
         this.managerName = managerName;
         this.resourcePath = resourcePath;
+
+        this.id = id;
 
         RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "]");
         this.manager = new DataLoaderResourceManager();
@@ -55,7 +58,7 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
 
     @Override
     public Identifier getFabricId() {
-        return GeneticsMod.id(managerName + "_data_loader_listener");
+        return id;
     }
 
     @Override
