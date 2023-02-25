@@ -5,6 +5,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderListener;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceManager;
+import net.diamonddev.libgenetics.common.api.v1.util.GeneralUtil;
 import net.diamonddev.libgenetics.core.command.abstraction.StringArrayListArgType;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -36,15 +37,10 @@ public class DataLoaderResourceManagerArgument extends StringArrayListArgType {
     }
     @Override
     public ArrayList<String> getArray() {
-        return toArrList(DataLoaderListener.listeners.stream().map(DataLoaderResourceManagerArgument::remapListeners).toList());
+        return GeneralUtil.toArrList(DataLoaderListener.listeners.stream().map(DataLoaderResourceManagerArgument::remapListeners).toList());
     }
 
     private static String remapListeners(DataLoaderListener listener) {
         return listener.getFabricId().toString();
-    }
-    private static <T> ArrayList<T> toArrList(Collection<T> collection) {
-        ArrayList<T> arr = new ArrayList<>();
-        arr.addAll(collection);
-        return arr;
     }
 }

@@ -1,7 +1,9 @@
 package net.diamonddev.libgenetics.core;
 
-import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceManager;
+import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFile;
+import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFileRegistry;
 import net.diamonddev.libgenetics.core.command.DataLoaderResourceManagerArgument;
+import net.diamonddev.libgenetics.core.command.JsonConfigFileIdentifierArgument;
 import net.diamonddev.libgenetics.core.command.LibGeneticsCommand;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
@@ -19,9 +21,13 @@ public class GeneticsMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		TestConfig config = JsonConfigFileRegistry.registerAndReadAsSelf(id("test"), TestConfig.class);
+
 		// cmd args
 		ArgumentTypeRegistry.registerArgumentType(id("dataloader_manager_command_arg"),
 				DataLoaderResourceManagerArgument.class, ConstantArgumentSerializer.of(DataLoaderResourceManagerArgument::resourceManager));
+		ArgumentTypeRegistry.registerArgumentType(id("json_config_file_command_arg"),
+				JsonConfigFileIdentifierArgument.class, ConstantArgumentSerializer.of(JsonConfigFileIdentifierArgument::config));
 
 		// cmd
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> LibGeneticsCommand.register(dispatcher));
@@ -35,4 +41,12 @@ public class GeneticsMod implements ModInitializer {
 		return FabricLoaderImpl.INSTANCE.isDevelopmentEnvironment();
 	}
 
+	public static class TestConfig implements JsonConfigFile {
+		@Override
+		public String getFilePathFromConfigDirectory() {
+			return "test.json";
+		}
+
+		String string;
+	}
 }
