@@ -1,5 +1,6 @@
 package net.diamonddev.libgenetics.core;
 
+import com.google.gson.annotations.SerializedName;
 import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFile;
 import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFileRegistry;
 import net.diamonddev.libgenetics.core.command.DataLoaderResourceManagerArgument;
@@ -19,9 +20,11 @@ public class GeneticsMod implements ModInitializer {
 	public static final String MODID = "libgenetics";
 	public static final String version = FabricLoaderImpl.INSTANCE.getModContainer(MODID).orElseThrow().getMetadata().getVersion().getFriendlyString();
 
+	public static LibGeneticsConfig LIBGENETICS_CONFIG;
 	@Override
 	public void onInitialize() {
-		TestConfig config = JsonConfigFileRegistry.registerAndReadAsSelf(id("test"), TestConfig.class);
+		// Config
+		LIBGENETICS_CONFIG = JsonConfigFileRegistry.registerAndReadAsSelf(id("libgenetics_default_config"), new LibGeneticsConfig(), LibGeneticsConfig.class);
 
 		// cmd args
 		ArgumentTypeRegistry.registerArgumentType(id("dataloader_manager_command_arg"),
@@ -41,12 +44,13 @@ public class GeneticsMod implements ModInitializer {
 		return FabricLoaderImpl.INSTANCE.isDevelopmentEnvironment();
 	}
 
-	public static class TestConfig implements JsonConfigFile {
+	public static class LibGeneticsConfig implements JsonConfigFile {
 		@Override
 		public String getFilePathFromConfigDirectory() {
-			return "test.json";
+			return ".diamonddev/libgenetics_default.json";
 		}
 
-		String string;
+		@SerializedName("libgenetics_cmd_permission_level")
+		public int libgeneticsCommandPermissionLevel = 4;
 	}
 }

@@ -6,18 +6,19 @@ import net.minecraft.util.Identifier;
 import java.util.HashMap;
 
 public class JsonConfigFileRegistry {
-    public static HashMap<Identifier, Class<? extends JsonConfigFile>> HASH = new HashMap<>();
+    public static HashMap<Identifier, JsonConfigFileWrapper> HASH = new HashMap<>();
 
 
-    private static <T> T register(Identifier id, Class<? extends JsonConfigFile> configFile, Class<T> readClass) {
-        HASH.put(id, configFile);
-        return new JsonConfigFileWrapper(configFile).read(readClass);
+    private static <V> V register(Identifier id, JsonConfigFile configFile, Class<V> readClass) {
+        JsonConfigFileWrapper wrapper = new JsonConfigFileWrapper(configFile);
+        HASH.put(id, wrapper);
+        return wrapper.read(readClass);
     }
-    public static <T extends JsonConfigFile> T registerAndReadAsSelf(Identifier id, Class<T> configFile) {
-        return register(id, configFile, configFile);
+    public static <T extends JsonConfigFile> T registerAndReadAsSelf(Identifier id, T configFile, Class<T> clazz) {
+        return register(id, configFile, clazz);
     }
 
-    public static JsonObject registerAndReadAsJsonObject(Identifier id, Class<? extends JsonConfigFile> configFile) {
+    public static JsonObject registerAndReadAsJsonObject(Identifier id, JsonConfigFile configFile) {
         return register(id, configFile, JsonObject.class);
     }
 }
