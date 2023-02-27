@@ -31,7 +31,7 @@ dependencies {
 
 ## Dependency Block (`gradle.properties`)
 ```
-  fabric_version=0.60.0+1.19.2
+  fabric_version= {latest should work}
   fasm_version = v2.3
   libgenetics_version = {version goes here}
  ```
