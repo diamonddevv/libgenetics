@@ -19,7 +19,7 @@ public class GeneticsMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("libGenetics");
 	public static final String MODID = "libgenetics";
 
-	public static LibGeneticsConfig LIBGENETICS_CONFIG;
+	public static LibGeneticsConfig LIBGENETICS_CONFIG = new LibGeneticsConfig();
 	@Override
 	public void onInitialize() {
 		// Config
@@ -33,14 +33,6 @@ public class GeneticsMod implements ModInitializer {
 
 		// cmd
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> LibGeneticsCommand.register(dispatcher));
-
-
-		if (hasDevTools()) {
-			LOGGER.info("----------------------------");
-			LOGGER.info("--       [DEV TOOLS]      --");
-			LOGGER.info("--        <ENABLED>       --");
-			LOGGER.info("----------------------------");
-		}
 
 		LOGGER.info("Initialized libGenetics.");
 	}
