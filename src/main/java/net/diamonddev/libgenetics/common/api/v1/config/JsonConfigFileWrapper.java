@@ -22,7 +22,7 @@ public class JsonConfigFileWrapper {
         this.logger = LogManager.getLogger(filename + " Config File Manager");
     }
 
-    public <V> V read(Class<V> readClass) {
+    public <T> T read(Class<T> readClass) {
 
         String path = getPath();
 
@@ -39,10 +39,11 @@ public class JsonConfigFileWrapper {
         }
 
         try {
-
+            boolean created = false;
             File file = new File(path);
             if (file.createNewFile()) {
                 logger.info("Created Config File at {}", file);
+                created = true;
             }
 
             FileReader fileReader = new FileReader(file);
@@ -67,11 +68,13 @@ public class JsonConfigFileWrapper {
 
             fileWriter.write(gson.toJson(JsonParser.parseString(toPrint.toString())));
 
-            V returnedJson = gson.fromJson(json, readClass);
+            T returnedJson = gson.fromJson(fileReader, readClass);
 
             fileWriter.flush();
             fileReader.close();
             fileWriter.close();
+
+            if (created) returnedJson = readNoFileManagement(readClass);
 
             return returnedJson;
         } catch (IOException e) {
@@ -84,11 +87,14 @@ public class JsonConfigFileWrapper {
     }
 
     public JsonObject readNoFileManagement() {
+        return readNoFileManagement(JsonObject.class);
+    }
+    public <T> T readNoFileManagement(Class<T> clazz) {
         String path = getPath();
 
         try {
             JsonReader r = new JsonReader(new FileReader(path));
-            JsonObject obj = gson.fromJson(r, JsonObject.class);
+            T obj = gson.fromJson(r, clazz);
             r.close();
             return obj;
         } catch (IOException e) {

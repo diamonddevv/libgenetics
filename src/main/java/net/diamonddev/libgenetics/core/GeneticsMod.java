@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 public class GeneticsMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("libGenetics");
 	public static final String MODID = "libgenetics";
-	public static final String version = FabricLoaderImpl.INSTANCE.getModContainer(MODID).orElseThrow().getMetadata().getVersion().getFriendlyString();
 
 	public static LibGeneticsConfig LIBGENETICS_CONFIG;
 	@Override
@@ -35,22 +34,37 @@ public class GeneticsMod implements ModInitializer {
 		// cmd
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> LibGeneticsCommand.register(dispatcher));
 
-		LOGGER.info("Initialized libGenetics " + version);
+
+		if (hasDevTools()) {
+			LOGGER.info("----------------------------");
+			LOGGER.info("--       [DEV TOOLS]      --");
+			LOGGER.info("--        <ENABLED>       --");
+			LOGGER.info("----------------------------");
+		}
+
+		LOGGER.info("Initialized libGenetics.");
 	}
 	public static Identifier id(String path) {
 		return new Identifier(MODID, path);
 	}
-	public static boolean isDevEnv() {
-		return FabricLoaderImpl.INSTANCE.isDevelopmentEnvironment();
+	public static boolean hasDevTools() {
+		return FabricLoaderImpl.INSTANCE.isDevelopmentEnvironment() || LIBGENETICS_CONFIG.dev.hasDevTools;
 	}
-
 	public static class LibGeneticsConfig implements JsonConfigFile {
 		@Override
 		public String getFilePathFromConfigDirectory() {
-			return ".diamonddev/libgenetics_default.json";
+			return ".diamonddev/libgenetics.json";
 		}
 
 		@SerializedName("libgenetics_cmd_permission_level")
 		public int libgeneticsCommandPermissionLevel = 4;
+
+		@SerializedName("development")
+		public Dev dev = new Dev();
+
+		public static class Dev {
+			@SerializedName("unlock_dev_tools")
+			public boolean hasDevTools = false;
+		}
 	}
 }

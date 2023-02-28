@@ -4,8 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFileWrapper;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResource;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceManager;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceType;
 import net.diamonddev.libgenetics.core.GeneticsMod;
+import net.minecraft.command.argument.NbtCompoundArgumentType;
+import net.minecraft.command.argument.NbtElementArgumentType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
@@ -21,16 +26,21 @@ public class LibGeneticsCommand {
         dispatcher.register(
                 literal("libgenetics").requires(scs -> scs.hasPermissionLevel(GeneticsMod.LIBGENETICS_CONFIG.libgeneticsCommandPermissionLevel))
                         .then(literal("getcache")
+
                                 .then(argument(RESOURCE_LISTENER_ID, DataLoaderResourceManagerArgument.resourceManager())
                                         .executes(LibGeneticsCommand::exeGetResourceCache)
                                 )
+
                         ).then(literal("getconfig")
+
                                 .then(argument(CONFIG_ID, JsonConfigFileIdentifierArgument.config())
                                         .executes(LibGeneticsCommand::exeGetConfigFileJson)
+
                                         .then(literal("getpath")
                                                 .executes(LibGeneticsCommand::exeGetConfigFilePath)
                                         )
                                 )
+
                         )
         );
     }
