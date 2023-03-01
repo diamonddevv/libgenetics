@@ -1,0 +1,6 @@
+{
+  "resource_type": "libgenetics:type",
+
+  "yes": true,
+  "no": false
+}

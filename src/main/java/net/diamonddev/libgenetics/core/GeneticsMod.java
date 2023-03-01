@@ -6,6 +6,7 @@ import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFileRegistry;
 import net.diamonddev.libgenetics.core.command.DataLoaderResourceManagerArgument;
 import net.diamonddev.libgenetics.core.command.JsonConfigFileIdentifierArgument;
 import net.diamonddev.libgenetics.core.command.LibGeneticsCommand;
+import net.diamonddev.libgentest.GeneticsTest;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -19,7 +20,7 @@ public class GeneticsMod implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("libGenetics");
 	public static final String MODID = "libgenetics";
 
-	public static LibGeneticsConfig LIBGENETICS_CONFIG = new LibGeneticsConfig();
+	public static LibGeneticsConfig LIBGENETICS_CONFIG;
 	@Override
 	public void onInitialize() {
 		// Config
@@ -34,13 +35,17 @@ public class GeneticsMod implements ModInitializer {
 		// cmd
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> LibGeneticsCommand.register(dispatcher));
 
+		// test
+		if (hasDevTools()) GeneticsTest.testInit();
+
 		LOGGER.info("Initialized libGenetics.");
 	}
+
 	public static Identifier id(String path) {
 		return new Identifier(MODID, path);
 	}
 	public static boolean hasDevTools() {
-		return FabricLoaderImpl.INSTANCE.isDevelopmentEnvironment() || LIBGENETICS_CONFIG.dev.hasDevTools;
+		return LIBGENETICS_CONFIG.dev.hasDevTests;
 	}
 	public static class LibGeneticsConfig implements JsonConfigFile {
 		@Override
@@ -55,8 +60,8 @@ public class GeneticsMod implements ModInitializer {
 		public Dev dev = new Dev();
 
 		public static class Dev {
-			@SerializedName("unlock_dev_tools")
-			public boolean hasDevTools = false;
+			@SerializedName("unlock_dev_tests")
+			public boolean hasDevTests = FabricLoaderImpl.INSTANCE.isDevelopmentEnvironment();
 		}
 	}
 }

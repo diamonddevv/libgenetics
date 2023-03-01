@@ -4,17 +4,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFileWrapper;
-import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResource;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceManager;
-import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceType;
 import net.diamonddev.libgenetics.core.GeneticsMod;
-import net.minecraft.command.argument.NbtCompoundArgumentType;
-import net.minecraft.command.argument.NbtElementArgumentType;
-import net.minecraft.nbt.NbtCompound;
+import net.diamonddev.libgentest.GeneticsTest;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
-import static net.minecraft.server.command.CommandManager.*;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
 
 public class LibGeneticsCommand {
 
@@ -41,8 +38,23 @@ public class LibGeneticsCommand {
                                         )
                                 )
 
+                        ).then(literal("devtools").requires(src -> GeneticsMod.hasDevTools())
+                                .then(literal("printouttest")
+                                        .executes(LibGeneticsCommand::exeDevHardcodedPrintoutTest)
+                                )
                         )
         );
+    }
+
+    private static int exeDevHardcodedPrintoutTest(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+
+        GeneticsTest.listener.getManager().forEachRecipe(GeneticsTest.type, res -> {
+            GeneticsTest.SerializationPojo pojo = res.getAsClass(GeneticsTest.SerializationPojo.class);
+            System.out.println(pojo.yes);
+            System.out.println(pojo.no);
+        });
+
+        return 1;
     }
 
     private static int exeGetConfigFilePath(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {

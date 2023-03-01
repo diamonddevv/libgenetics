@@ -68,13 +68,11 @@ public class JsonConfigFileWrapper {
 
             fileWriter.write(gson.toJson(JsonParser.parseString(toPrint.toString())));
 
-            T returnedJson = gson.fromJson(fileReader, readClass);
+            T returnedJson = gson.fromJson(json, readClass);
 
             fileWriter.flush();
             fileReader.close();
             fileWriter.close();
-
-            if (created) returnedJson = readNoFileManagement(readClass);
 
             return returnedJson;
         } catch (IOException e) {

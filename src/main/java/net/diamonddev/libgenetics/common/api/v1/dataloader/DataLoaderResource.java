@@ -1,6 +1,8 @@
 package net.diamonddev.libgenetics.common.api.v1.dataloader;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -40,5 +42,15 @@ public class DataLoaderResource {
     }
     public Identifier getIdentifier(String jsonKey) {
         return new Identifier(getString(jsonKey));
+    }
+
+    public <T> T getAsClass(Class<T> clazz) {
+        return new Gson().fromJson(hashToObject(this.getHash()), clazz);
+    }
+
+    private static JsonObject hashToObject(HashMap<String, JsonElement> objHash) {
+        JsonObject obj = new JsonObject();
+        objHash.forEach(obj::add);
+        return obj;
     }
 }
