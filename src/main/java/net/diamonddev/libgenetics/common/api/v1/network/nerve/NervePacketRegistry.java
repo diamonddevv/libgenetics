@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.network;
+package net.diamonddev.libgenetics.common.api.v1.network.nerve;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

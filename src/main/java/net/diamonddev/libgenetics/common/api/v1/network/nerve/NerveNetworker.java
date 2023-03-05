@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.network;
+package net.diamonddev.libgenetics.common.api.v1.network.nerve;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -8,7 +8,8 @@ import net.minecraft.util.Identifier;
 
 public class NerveNetworker {
     /**
-     * LibGenetics Networking API. I called it Nerve, after the Nervous System in living creatures, much how the whole api is named after the foundations of life.
+     * LibGenetics Networking API.
+     * I called it Nerve, after the Nervous System in living creatures, much how the whole API is named after the foundations of life.
      */
 
     public enum Pathway {

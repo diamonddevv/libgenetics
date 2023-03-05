@@ -1,6 +1,6 @@
 package net.diamonddev.libgentest;
 
-import net.diamonddev.libgenetics.common.api.v1.network.NervePacketRegistry;
+import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacketRegistry;
 import net.diamonddev.libgenetics.core.GeneticsMod;
 
 public class GeneticsTestClient {

@@ -1,6 +1,6 @@
 package net.diamonddev.libgentest;
 
-import net.diamonddev.libgenetics.common.api.v1.network.NerveS2CPacket;
+import net.diamonddev.libgenetics.common.api.v1.network.nerve.NerveS2CPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -9,7 +9,7 @@ public class TestPacket implements NerveS2CPacket<TestPacket, TestPacket.TestPac
 
     @Override
     public PacketByteBuf write(TestPacketData data) {
-        PacketByteBuf buf = getEmptyBuf();
+        PacketByteBuf buf = getNewBuf();
 
         buf.writeString(data.payload);
 
@@ -25,7 +25,7 @@ public class TestPacket implements NerveS2CPacket<TestPacket, TestPacket.TestPac
     public ClientPlayNetworking.PlayChannelHandler receive(Identifier channel) {
         return (client, handler, buf, responseSender) -> {
             System.out.println("Recieved Packet from '" + channel + "'! Payload String: ");
-            System.out.println(read(buf).payload);
+            System.out.println("Value: " + read(buf).payload);
         };
     }
 

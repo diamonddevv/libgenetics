@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.network;
+package net.diamonddev.libgenetics.common.api.v1.network.nerve;
 
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.PacketByteBuf;
@@ -11,8 +11,8 @@ import net.minecraft.network.PacketByteBuf;
  */
 public interface NervePacket<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> {
 
-    default PacketByteBuf getEmptyBuf() {
-        return PacketByteBufs.empty();
+    default PacketByteBuf getNewBuf() {
+        return PacketByteBufs.create();
     }
 
     PacketByteBuf write(D data);
