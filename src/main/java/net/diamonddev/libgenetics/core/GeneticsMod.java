@@ -1,8 +1,8 @@
 package net.diamonddev.libgenetics.core;
 
 import com.google.gson.annotations.SerializedName;
-import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFile;
-import net.diamonddev.libgenetics.common.api.v1.config.JsonConfigFileRegistry;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.JsonConfigFile;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.JsonConfigFileRegistry;
 import net.diamonddev.libgenetics.core.command.DataLoaderResourceManagerArgument;
 import net.diamonddev.libgenetics.core.command.JsonConfigFileIdentifierArgument;
 import net.diamonddev.libgenetics.core.command.LibGeneticsCommand;

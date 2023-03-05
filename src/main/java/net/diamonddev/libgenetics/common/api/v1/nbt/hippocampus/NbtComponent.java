@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.nbt;
+package net.diamonddev.libgenetics.common.api.v1.nbt.hippocampus;
 
 import net.minecraft.nbt.NbtCompound;
 

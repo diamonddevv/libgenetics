@@ -10,7 +10,9 @@ import java.util.Map;
 public class NervePacketRegistry<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> {
     private static final HashMap<Identifier, NervePacketRegistryEntry<?, ?>> REGISTRY_HASH = new HashMap<>();
 
-
+    public static HashMap<Identifier, NervePacketRegistryEntry<?, ?>> getRegistryHash() {
+        return REGISTRY_HASH;
+    }
     public static <T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> NervePacketRegistryEntry<T, D> register(Identifier reference, NervePacketRegistryEntry<T, D> entry) {
         REGISTRY_HASH.put(reference, entry);
         return entry;

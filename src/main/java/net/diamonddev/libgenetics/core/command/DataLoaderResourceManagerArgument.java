@@ -3,8 +3,8 @@ package net.diamonddev.libgenetics.core.command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderListener;
-import net.diamonddev.libgenetics.common.api.v1.dataloader.DataLoaderResourceManager;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionDataListener;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionResourceManager;
 import net.diamonddev.libgenetics.common.api.v1.util.GeneralUtil;
 import net.diamonddev.libgenetics.core.command.abstraction.StringArrayListArgType;
 import net.minecraft.server.command.ServerCommandSource;
@@ -21,11 +21,11 @@ public class DataLoaderResourceManagerArgument extends StringArrayListArgType {
     private DataLoaderResourceManagerArgument() {}
     public static DataLoaderResourceManagerArgument resourceManager() {return new DataLoaderResourceManagerArgument();}
 
-    public static DataLoaderResourceManager getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
-        Collection<DataLoaderListener> listeners = DataLoaderListener.listeners;
+    public static CognitionResourceManager getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
+        Collection<CognitionDataListener> listeners = CognitionDataListener.listeners;
         String name = context.getArgument(argumentName, String.class);
-        DataLoaderResourceManager mgr = null;
-        for (DataLoaderListener listener : listeners) {
+        CognitionResourceManager mgr = null;
+        for (CognitionDataListener listener : listeners) {
             if (listener.getFabricId().toString().matches(name)) {
                 mgr = listener.getManager();
             }
@@ -37,10 +37,10 @@ public class DataLoaderResourceManagerArgument extends StringArrayListArgType {
     }
     @Override
     public ArrayList<String> getArray() {
-        return GeneralUtil.toArrList(DataLoaderListener.listeners.stream().map(DataLoaderResourceManagerArgument::remapListeners).toList());
+        return GeneralUtil.toArrList(CognitionDataListener.listeners.stream().map(DataLoaderResourceManagerArgument::remapListeners).toList());
     }
 
-    private static String remapListeners(DataLoaderListener listener) {
+    private static String remapListeners(CognitionDataListener listener) {
         return listener.getFabricId().toString();
     }
 }

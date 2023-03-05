@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.dataloader;
+package net.diamonddev.libgenetics.common.api.v1.dataloader.cognition;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -7,12 +7,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
-public class DataLoaderResource {
+public class CognitionDataResource {
     private final HashMap<String, JsonElement> objHash;
-    private final DataLoaderResourceType type;
+    private final CognitionResourceType type;
     private final Identifier id;
 
-    public DataLoaderResource(DataLoaderResourceType type, Identifier identifier) {
+    public CognitionDataResource(CognitionResourceType type, Identifier identifier) {
         this.type = type;
         this.id = identifier;
         this.objHash = new HashMap<>();

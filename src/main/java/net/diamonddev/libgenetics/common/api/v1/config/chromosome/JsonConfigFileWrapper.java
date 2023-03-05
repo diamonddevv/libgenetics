@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.config;
+package net.diamonddev.libgenetics.common.api.v1.config.chromosome;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;

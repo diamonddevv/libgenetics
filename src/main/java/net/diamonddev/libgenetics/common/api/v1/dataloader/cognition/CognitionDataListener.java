@@ -1,8 +1,7 @@
-package net.diamonddev.libgenetics.common.api.v1.dataloader;
+package net.diamonddev.libgenetics.common.api.v1.dataloader.cognition;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.diamonddev.libgenetics.core.GeneticsMod;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
@@ -16,7 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class DataLoaderListener implements SimpleSynchronousResourceReloadListener {
+public class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
 
     /*
         This is the reabstraction of the Absract Recipe Loader from my mod Dialabs. It is a system that removes the need for making new data listeners and instead can
@@ -25,31 +24,31 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
 
     private final Logger RESOURCE_MANAGER_LOGGER;
     private final String managerName;
-    private final DataLoaderResourceManager manager;
+    private final CognitionResourceManager manager;
     private final String resourcePath;
     private final Identifier id;
 
-    public DataLoaderListener(String managerName, Identifier id) {
+    public CognitionDataListener(String managerName, Identifier id) {
         this(managerName, id, managerName + "_data");
     }
-    public DataLoaderListener(String managerName, Identifier id, String resourcePath) {
+    public CognitionDataListener(String managerName, Identifier id, String resourcePath) {
         this.managerName = managerName;
         this.resourcePath = resourcePath;
 
         this.id = id;
 
         RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "]");
-        this.manager = new DataLoaderResourceManager();
+        this.manager = new CognitionResourceManager();
     }
 
-    public static ArrayList<DataLoaderListener> listeners = new ArrayList<>();
+    public static ArrayList<CognitionDataListener> listeners = new ArrayList<>();
 
-    public static void registerListener(DataLoaderListener listener) {
+    public static void registerListener(CognitionDataListener listener) {
         listeners.add(listener);
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(listener);
     }
 
-    public DataLoaderResourceManager getManager() {
+    public CognitionResourceManager getManager() {
         return this.manager;
     }
 
@@ -74,13 +73,13 @@ public class DataLoaderListener implements SimpleSynchronousResourceReloadListen
                     // Consume stream
                     InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8); // Create Reader
                     JsonObject json = gson.fromJson(reader, JsonObject.class);
-                    Identifier typeId = new Identifier(json.get(DataLoaderResourceManager.IDPARAM).getAsString());
+                    Identifier typeId = new Identifier(json.get(CognitionResourceManager.IDPARAM).getAsString());
 
                     // Read from Type
-                    DataLoaderResourceType type = this.getManager().getType(typeId);
+                    CognitionResourceType type = this.getManager().getType(typeId);
 
                     // Read JSON
-                    DataLoaderResource resource = new DataLoaderResource(type, id);
+                    CognitionDataResource resource = new CognitionDataResource(type, id);
 
                     // Add keys
                     ArrayList<String> jsonKeys = new ArrayList<>();
