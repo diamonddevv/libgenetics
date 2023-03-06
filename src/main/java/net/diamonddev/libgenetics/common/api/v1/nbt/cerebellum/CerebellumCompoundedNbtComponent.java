@@ -1,12 +1,12 @@
-package net.diamonddev.libgenetics.common.api.v1.nbt.hippocampus;
+package net.diamonddev.libgenetics.common.api.v1.nbt.cerebellum;
 
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.HashMap;
 import java.util.Set;
 
-public class CompoundedNbtComponent extends NbtComponent<HashMap<String, NbtCompound>> {
-    public CompoundedNbtComponent(String key) {
+public class CerebellumCompoundedNbtComponent extends CerebellumNbtComponent<HashMap<String, NbtCompound>> {
+    public CerebellumCompoundedNbtComponent(String key) {
         super(key);
     }
 
@@ -28,7 +28,7 @@ public class CompoundedNbtComponent extends NbtComponent<HashMap<String, NbtComp
         nbt.put(key, writeCompoundedComponents);
     }
 
-    public <T> void modify(NbtComponent<T> component, T data, NbtCompound superCompound) {
+    public <T> void modify(CerebellumNbtComponent<T> component, T data, NbtCompound superCompound) {
         HashMap<String, NbtCompound> map = this.read(superCompound);
 
         NbtCompound compound = getOrCreateCompoundFromMap(map, component.key);
@@ -39,7 +39,7 @@ public class CompoundedNbtComponent extends NbtComponent<HashMap<String, NbtComp
         this.write(superCompound, map);
     }
 
-    public <T> T getValue(NbtComponent<T> component, NbtCompound superCompound) {
+    public <T> T getValue(CerebellumNbtComponent<T> component, NbtCompound superCompound) {
         HashMap<String, NbtCompound> map = this.read(superCompound);
 
         NbtCompound compound = getOrCreateCompoundFromMap(map, component.key);

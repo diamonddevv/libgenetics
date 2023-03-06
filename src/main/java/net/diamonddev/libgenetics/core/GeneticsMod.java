@@ -1,10 +1,10 @@
 package net.diamonddev.libgenetics.core;
 
 import com.google.gson.annotations.SerializedName;
-import net.diamonddev.libgenetics.common.api.v1.config.chromosome.JsonConfigFile;
-import net.diamonddev.libgenetics.common.api.v1.config.chromosome.JsonConfigFileRegistry;
-import net.diamonddev.libgenetics.core.command.DataLoaderResourceManagerArgument;
-import net.diamonddev.libgenetics.core.command.JsonConfigFileIdentifierArgument;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFile;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileRegistry;
+import net.diamonddev.libgenetics.core.command.ChromosomeConfigFileIdentifierArgument;
+import net.diamonddev.libgenetics.core.command.CognitionResourceManagerArgument;
 import net.diamonddev.libgenetics.core.command.LibGeneticsCommand;
 import net.diamonddev.libgentest.GeneticsTest;
 import net.fabricmc.api.ModInitializer;
@@ -24,13 +24,13 @@ public class GeneticsMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		// Config
-		LIBGENETICS_CONFIG = JsonConfigFileRegistry.registerAndReadAsSelf(id("libgenetics_default_config"), new LibGeneticsConfig(), LibGeneticsConfig.class);
+		LIBGENETICS_CONFIG = ChromosomeConfigFileRegistry.registerAndReadAsSelf(id("libgenetics_default_config"), new LibGeneticsConfig(), LibGeneticsConfig.class);
 
 		// cmd args
 		ArgumentTypeRegistry.registerArgumentType(id("dataloader_manager_command_arg"),
-				DataLoaderResourceManagerArgument.class, ConstantArgumentSerializer.of(DataLoaderResourceManagerArgument::resourceManager));
+				CognitionResourceManagerArgument.class, ConstantArgumentSerializer.of(CognitionResourceManagerArgument::resourceManager));
 		ArgumentTypeRegistry.registerArgumentType(id("json_config_file_command_arg"),
-				JsonConfigFileIdentifierArgument.class, ConstantArgumentSerializer.of(JsonConfigFileIdentifierArgument::config));
+				ChromosomeConfigFileIdentifierArgument.class, ConstantArgumentSerializer.of(ChromosomeConfigFileIdentifierArgument::config));
 
 		// cmd
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> LibGeneticsCommand.register(dispatcher));
@@ -47,7 +47,7 @@ public class GeneticsMod implements ModInitializer {
 	public static boolean hasDevTools() {
 		return LIBGENETICS_CONFIG.dev.hasDevTests;
 	}
-	public static class LibGeneticsConfig implements JsonConfigFile {
+	public static class LibGeneticsConfig implements ChromosomeConfigFile {
 		@Override
 		public String getFilePathFromConfigDirectory() {
 			return ".diamonddev/libgenetics.json";

@@ -13,13 +13,13 @@ import net.minecraft.text.Text;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class DataLoaderResourceManagerArgument extends StringArrayListArgType {
+public class CognitionResourceManagerArgument extends StringArrayListArgType {
 
     private static final DynamicCommandExceptionType INVALID_EXCEPTION =
             new DynamicCommandExceptionType((id) -> Text.literal("Listener " + id + " was not found in register!"));
 
-    private DataLoaderResourceManagerArgument() {}
-    public static DataLoaderResourceManagerArgument resourceManager() {return new DataLoaderResourceManagerArgument();}
+    private CognitionResourceManagerArgument() {}
+    public static CognitionResourceManagerArgument resourceManager() {return new CognitionResourceManagerArgument();}
 
     public static CognitionResourceManager getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
         Collection<CognitionDataListener> listeners = CognitionDataListener.listeners;
@@ -37,7 +37,7 @@ public class DataLoaderResourceManagerArgument extends StringArrayListArgType {
     }
     @Override
     public ArrayList<String> getArray() {
-        return GeneralUtil.toArrList(CognitionDataListener.listeners.stream().map(DataLoaderResourceManagerArgument::remapListeners).toList());
+        return GeneralUtil.toArrList(CognitionDataListener.listeners.stream().map(CognitionResourceManagerArgument::remapListeners).toList());
     }
 
     private static String remapListeners(CognitionDataListener listener) {

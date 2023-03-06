@@ -8,15 +8,15 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 
-public class JsonConfigFileWrapper {
+public class ChromosomeConfigFileWrapper {
 
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private final String filename;
     private final Logger logger;
-    private final JsonConfigFile config;
+    private final ChromosomeConfigFile config;
 
-    protected JsonConfigFileWrapper(JsonConfigFile configFile) {
+    protected ChromosomeConfigFileWrapper(ChromosomeConfigFile configFile) {
         this.filename = configFile.getFilePathFromConfigDirectory();
         this.config = configFile;
         this.logger = LogManager.getLogger(filename + " Config File Manager");
