@@ -6,6 +6,7 @@ import net.diamonddev.libgenetics.core.GeneticsMod;
 public class GeneticsTest {
 
     public static NervePacketRegistry.NervePacketRegistryEntry<TestPacket, TestPacket.TestPacketData> testPacketRegistryEntry;
+
     public static void testInit() {
         testPacketRegistryEntry = new NervePacketRegistry.NervePacketRegistryEntry<>(
                 GeneticsMod.id("test_channel"), new TestPacket()

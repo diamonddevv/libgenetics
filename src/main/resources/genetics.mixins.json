@@ -7,8 +7,6 @@
     "EnchantmentTargetMixin",
     "IngredientMixin"
   ],
-  "client": [
-  ],
   "injectors": {
     "defaultRequire": 1
   }

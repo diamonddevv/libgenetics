@@ -23,6 +23,7 @@ public class CognitionDataResource {
         return id.toString();
     }
 
+    // getAsXYZ()
     public HashMap<String, JsonElement> getHash() {
         return objHash;
     }
@@ -48,6 +49,7 @@ public class CognitionDataResource {
         return new Gson().fromJson(hashToObject(this.getHash()), clazz);
     }
 
+    // mappers
     private static JsonObject hashToObject(HashMap<String, JsonElement> objHash) {
         JsonObject obj = new JsonObject();
         objHash.forEach(obj::add);

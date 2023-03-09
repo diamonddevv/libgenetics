@@ -27,17 +27,28 @@ public class CognitionDataListener implements SimpleSynchronousResourceReloadLis
     private final CognitionResourceManager manager;
     private final String resourcePath;
     private final Identifier id;
+    private final ResourceType restype;
 
     public CognitionDataListener(String managerName, Identifier id) {
-        this(managerName, id, managerName + "_data");
+        this(managerName, id, ResourceType.SERVER_DATA);
     }
+
+    public CognitionDataListener(String managerName, Identifier id, ResourceType resourceType) {
+        this(managerName, id, managerName + "_data", resourceType);
+    }
+
     public CognitionDataListener(String managerName, Identifier id, String resourcePath) {
+        this(managerName, id, resourcePath, ResourceType.SERVER_DATA);
+    }
+    public CognitionDataListener(String managerName, Identifier id, String resourcePath, ResourceType resourceType) {
         this.managerName = managerName;
         this.resourcePath = resourcePath;
 
         this.id = id;
 
-        RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "]");
+        this.restype = resourceType;
+
+        RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "/" + restype + "]");
         this.manager = new CognitionResourceManager();
     }
 
@@ -45,7 +56,7 @@ public class CognitionDataListener implements SimpleSynchronousResourceReloadLis
 
     public static void registerListener(CognitionDataListener listener) {
         listeners.add(listener);
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(listener);
+        ResourceManagerHelper.get(listener.restype).registerReloadListener(listener);
     }
 
     public CognitionResourceManager getManager() {
