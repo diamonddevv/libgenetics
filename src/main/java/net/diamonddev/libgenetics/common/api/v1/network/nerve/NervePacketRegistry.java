@@ -61,6 +61,30 @@ public class NervePacketRegistry<T extends NervePacket<T, D>, D extends NervePac
         }
     }
 
+    /**
+     * Should be called on Client Initialization.
+     * @param regEntry Packet
+     */
+    public static <T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> void initClientS2CReciever(NervePacketRegistryEntry<T, D> regEntry) {
+        Identifier channel = getChannelId(getRegistryReference(regEntry));
+        NervePacket<?, ?> packet = REGISTRY_HASH.get(getRegistryReference(regEntry)).packet();
+        if (packet instanceof NerveS2CPacket<?,?> s2cPacket) {
+            ClientPlayNetworking.registerGlobalReceiver(channel, s2cPacket.receive(channel));
+        }
+    }
+
+    /**
+     * Should be called on Server Initialization.
+     * @param regEntry Packet
+     */
+    public static <T extends NervePacket<T, D>, D extends NervePacket.NervePacketData>void initServerC2SReciever(NervePacketRegistryEntry<T, D> regEntry) {
+        Identifier channel = getChannelId(getRegistryReference(regEntry));
+        NervePacket<?, ?> packet = REGISTRY_HASH.get(getRegistryReference(regEntry)).packet();
+        if (packet instanceof NerveC2SPacket<?,?> c2sPacket) {
+            ServerPlayNetworking.registerGlobalReceiver(channel, c2sPacket.receive(channel));
+        }
+    }
+
     public record NervePacketRegistryEntry<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData>(Identifier channel, NervePacket<T, D> packet) {
     }
 }

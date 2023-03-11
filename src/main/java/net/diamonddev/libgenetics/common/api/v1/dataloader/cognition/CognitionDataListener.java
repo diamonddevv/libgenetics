@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
+public abstract class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
 
     /*
         This is the reabstraction of the Absract Recipe Loader from my mod Dialabs. It is a system that removes the need for making new data listeners and instead can
@@ -63,6 +63,8 @@ public class CognitionDataListener implements SimpleSynchronousResourceReloadLis
         return this.manager;
     }
 
+    public abstract void onReloadForEachResource(CognitionDataResource resource);
+
 
     private static final Gson gson = new Gson();
 
@@ -99,6 +101,9 @@ public class CognitionDataListener implements SimpleSynchronousResourceReloadLis
 
                     // Add
                     this.getManager().CACHE.getOrCreateKey(type).add(resource);
+
+                    // CognitionDataListener#onReloadForEachResource()
+                    onReloadForEachResource(resource);
 
                 } catch (Exception e) {
                     RESOURCE_MANAGER_LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
