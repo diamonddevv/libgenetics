@@ -63,7 +63,7 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
         return this.manager;
     }
 
-    public abstract void onReloadForEachResource(CognitionDataResource resource);
+    public abstract void onReloadForEachResource(CognitionDataResource resource, Identifier path);
 
 
     private static final Gson gson = new Gson();
@@ -103,7 +103,7 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
                     this.getManager().CACHE.getOrCreateKey(type).add(resource);
 
                     // CognitionDataListener#onReloadForEachResource()
-                    onReloadForEachResource(resource);
+                    onReloadForEachResource(resource, id);
 
                 } catch (Exception e) {
                     RESOURCE_MANAGER_LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
