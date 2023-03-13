@@ -74,6 +74,8 @@ public class ChromosomeConfigFileWrapper {
             fileReader.close();
             fileWriter.close();
 
+            if (created) returnedJson = readNoFileManagement(readClass);
+
             return returnedJson;
         } catch (IOException e) {
             throw new RuntimeException("Malformed JSON Config File at '" + path + "'");
