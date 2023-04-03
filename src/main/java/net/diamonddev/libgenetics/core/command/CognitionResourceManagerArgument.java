@@ -21,11 +21,11 @@ public class CognitionResourceManagerArgument extends StringArrayListArgType {
     private CognitionResourceManagerArgument() {}
     public static CognitionResourceManagerArgument resourceManager() {return new CognitionResourceManagerArgument();}
 
-    public static CognitionResourceManager getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
-        Collection<CognitionDataListener> listeners = CognitionDataListener.listeners;
+    public static CognitionResourceManager<?> getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
+        ArrayList<CognitionDataListener<?>> listeners = CognitionDataListener.listeners;
         String name = context.getArgument(argumentName, String.class);
-        CognitionResourceManager mgr = null;
-        for (CognitionDataListener listener : listeners) {
+        CognitionResourceManager<?> mgr = null;
+        for (CognitionDataListener<?> listener : listeners) {
             if (listener.getFabricId().toString().matches(name)) {
                 mgr = listener.getManager();
             }
@@ -40,7 +40,7 @@ public class CognitionResourceManagerArgument extends StringArrayListArgType {
         return GeneralUtil.toArrList(CognitionDataListener.listeners.stream().map(CognitionResourceManagerArgument::remapListeners).toList());
     }
 
-    private static String remapListeners(CognitionDataListener listener) {
+    private static String remapListeners(CognitionDataListener<?> listener) {
         return listener.getFabricId().toString();
     }
 }

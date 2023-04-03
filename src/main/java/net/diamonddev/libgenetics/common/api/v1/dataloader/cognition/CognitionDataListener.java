@@ -9,13 +9,14 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public abstract class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
+public abstract class CognitionDataListener<T> implements SimpleSynchronousResourceReloadListener {
 
     /*
         This is the reabstraction of the Absract Recipe Loader from my mod Dialabs. It is a system that removes the need for making new data listeners and instead can
@@ -49,21 +50,22 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
         this.restype = resourceType;
 
         RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "/" + restype + "]");
-        this.manager = new CognitionResourceManager();
+        this.manager = new CognitionResourceManager<>();
     }
 
-    public static ArrayList<CognitionDataListener> listeners = new ArrayList<>();
+    public static ArrayList<CognitionDataListener<?>> listeners = new ArrayList<>();
 
-    public static void registerListener(CognitionDataListener listener) {
+    public static <T> void registerListener(CognitionDataListener<T> listener) {
         listeners.add(listener);
         ResourceManagerHelper.get(listener.restype).registerReloadListener(listener);
     }
 
-    public CognitionResourceManager getManager() {
+    public CognitionResourceManager<T> getManager() {
         return this.manager;
     }
 
-    public abstract void onReloadForEachResource(CognitionDataResource resource, Identifier path);
+    public abstract void onReloadForEachResource(CognitionDataResource<T> resource, Identifier path, boolean usedDeserializationClass, @Nullable T deserializationClass);
+    public abstract void onFinishReload();
 
 
     private static final Gson gson = new Gson();
@@ -89,26 +91,37 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
                     Identifier typeId = new Identifier(json.get(CognitionResourceManager.IDPARAM).getAsString());
 
                     // Read from Type
-                    CognitionResourceType type = this.getManager().getType(typeId);
+                    CognitionResourceType<T> type = this.getManager().getType(typeId);
 
                     // Read JSON
-                    CognitionDataResource resource = new CognitionDataResource(type, id);
+                    CognitionDataResource<T> resource = new CognitionDataResource<>(type, id);
 
                     // Add keys
                     ArrayList<String> jsonKeys = new ArrayList<>();
                     type.addJsonKeys(jsonKeys);
                     jsonKeys.forEach(s -> resource.getHash().put(s, json.get(s)));
 
+                    // Deserialize to Class
+                    boolean deserializedToClass = false;
+                    T deserialized = null;
+                    if (type.getDeserializationClass() != null) {
+                        deserializedToClass = true;
+                        deserialized = resource.getAsClass(type.getDeserializationClass());
+                    }
+
                     // Add
                     this.getManager().CACHE.getOrCreateKey(type).add(resource);
 
                     // CognitionDataListener#onReloadForEachResource()
-                    onReloadForEachResource(resource, id);
+                    onReloadForEachResource(resource, id, deserializedToClass, deserialized);
 
                 } catch (Exception e) {
                     RESOURCE_MANAGER_LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
                 }
             }
         }
+
+        // CognitionDataListener#onFinishReload
+        onFinishReload();
     }
 }
