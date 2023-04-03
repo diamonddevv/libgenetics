@@ -24,7 +24,7 @@ public class CognitionResourceManagerArgument extends StringArrayListArgType {
     public static CognitionResourceManager getManager(CommandContext<ServerCommandSource> context, String argumentName) throws CommandSyntaxException {
         ArrayList<CognitionDataListener> listeners = CognitionDataListener.listeners;
         String name = context.getArgument(argumentName, String.class);
-        CognitionResourceManager<?> mgr = null;
+        CognitionResourceManager mgr = null;
         for (CognitionDataListener listener : listeners) {
             if (listener.getFabricId().toString().matches(name)) {
                 mgr = listener.getManager();
