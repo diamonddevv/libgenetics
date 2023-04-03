@@ -5,8 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public interface CognitionResourceType<T> {
+public interface CognitionResourceType {
     Identifier getId();
     void addJsonKeys(ArrayList<String> keys);
-    @Nullable Class<T> getDeserializationClass();
 }

@@ -7,17 +7,15 @@ import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
-public class CognitionDataResource<C> {
+public class CognitionDataResource {
     private final HashMap<String, JsonElement> objHash;
-    private final CognitionResourceType<C> type;
+    private final CognitionResourceType type;
     private final Identifier id;
-    private final Class<C> deserializationClass;
 
-    public CognitionDataResource(CognitionResourceType<C> type, Identifier identifier) {
+    public CognitionDataResource(CognitionResourceType type, Identifier identifier) {
         this.type = type;
         this.id = identifier;
         this.objHash = new HashMap<>();
-        this.deserializationClass = null;
     }
 
     @Override
@@ -25,7 +23,7 @@ public class CognitionDataResource<C> {
         return id.toString();
     }
 
-    public CognitionResourceType<C> getType() {
+    public CognitionResourceType getType() {
         return type;
     }
 

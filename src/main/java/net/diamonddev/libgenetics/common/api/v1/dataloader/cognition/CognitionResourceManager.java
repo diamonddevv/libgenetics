@@ -6,35 +6,35 @@ import net.minecraft.util.Identifier;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class CognitionResourceManager<T> {
+public class CognitionResourceManager {
 
     public CognitionResourceManager() {
 
     }
 
     // CACHE
-    public final KeyedArrayCache<CognitionResourceType<T>, CognitionDataResource<T>> CACHE = new KeyedArrayCache<>();
+    public final KeyedArrayCache<CognitionResourceType, CognitionDataResource> CACHE = new KeyedArrayCache<>();
 
-    private final HashMap<Identifier, CognitionResourceType<T>> TYPES = new HashMap<>();
+    private final HashMap<Identifier, CognitionResourceType> TYPES = new HashMap<>();
 
     ///
-    public void registerType(CognitionResourceType<T> type) {
+    public void registerType(CognitionResourceType type) {
         TYPES.put(type.getId(), type);
     }
     
-    public static <T> void registerType(CognitionDataListener<T> listener, CognitionResourceType<T> type) {
+    public static <T> void registerType(CognitionDataListener listener, CognitionResourceType type) {
         listener.getManager().registerType(type);
     }
 
-    public CognitionResourceType<T> getType(Identifier typeId) {
+    public CognitionResourceType getType(Identifier typeId) {
         return TYPES.get(typeId);
     }
 
-    public void forEachResource(CognitionResourceType<T> type, Consumer<CognitionDataResource<T>> consumer) {
+    public void forEachResource(CognitionResourceType type, Consumer<CognitionDataResource> consumer) {
         CACHE.get(type).forEach(consumer);
     }
 
-    public static <T> void forEachResource(CognitionDataListener<T> listener, CognitionResourceType<T> type, Consumer<CognitionDataResource<T>> consumer) {
+    public static <T> void forEachResource(CognitionDataListener listener, CognitionResourceType type, Consumer<CognitionDataResource> consumer) {
         listener.getManager().forEachResource(type, consumer);
     }
     //

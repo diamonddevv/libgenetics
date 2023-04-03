@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public abstract class CognitionDataListener<T> implements SimpleSynchronousResourceReloadListener {
+public abstract class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
 
     /*
         This is the reabstraction of the Absract Recipe Loader from my mod Dialabs. It is a system that removes the need for making new data listeners and instead can
@@ -50,21 +50,21 @@ public abstract class CognitionDataListener<T> implements SimpleSynchronousResou
         this.restype = resourceType;
 
         RESOURCE_MANAGER_LOGGER = LogManager.getLogger("LibGenetics Resource Loader Manager [" + managerName + "/" + restype + "]");
-        this.manager = new CognitionResourceManager<>();
+        this.manager = new CognitionResourceManager();
     }
 
-    public static ArrayList<CognitionDataListener<?>> listeners = new ArrayList<>();
+    public static ArrayList<CognitionDataListener> listeners = new ArrayList<>();
 
-    public static <T> void registerListener(CognitionDataListener<T> listener) {
+    public static void registerListener(CognitionDataListener listener) {
         listeners.add(listener);
         ResourceManagerHelper.get(listener.restype).registerReloadListener(listener);
     }
 
-    public CognitionResourceManager<T> getManager() {
+    public CognitionResourceManager getManager() {
         return this.manager;
     }
 
-    public abstract void onReloadForEachResource(CognitionDataResource<T> resource, Identifier path, boolean usedDeserializationClass, @Nullable T deserializationClass);
+    public abstract void onReloadForEachResource(CognitionDataResource resource, Identifier path);
     public abstract void onFinishReload();
 
 
@@ -91,29 +91,21 @@ public abstract class CognitionDataListener<T> implements SimpleSynchronousResou
                     Identifier typeId = new Identifier(json.get(CognitionResourceManager.IDPARAM).getAsString());
 
                     // Read from Type
-                    CognitionResourceType<T> type = this.getManager().getType(typeId);
+                    CognitionResourceType type = this.getManager().getType(typeId);
 
                     // Read JSON
-                    CognitionDataResource<T> resource = new CognitionDataResource<>(type, id);
+                    CognitionDataResource resource = new CognitionDataResource(type, id);
 
                     // Add keys
                     ArrayList<String> jsonKeys = new ArrayList<>();
                     type.addJsonKeys(jsonKeys);
                     jsonKeys.forEach(s -> resource.getHash().put(s, json.get(s)));
 
-                    // Deserialize to Class
-                    boolean deserializedToClass = false;
-                    T deserialized = null;
-                    if (type.getDeserializationClass() != null) {
-                        deserializedToClass = true;
-                        deserialized = resource.getAsClass(type.getDeserializationClass());
-                    }
-
                     // Add
                     this.getManager().CACHE.getOrCreateKey(type).add(resource);
 
                     // CognitionDataListener#onReloadForEachResource()
-                    onReloadForEachResource(resource, id, deserializedToClass, deserialized);
+                    onReloadForEachResource(resource, id);
 
                 } catch (Exception e) {
                     RESOURCE_MANAGER_LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
