@@ -1,8 +1,11 @@
 package net.diamonddev.libgenetics.core.command;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.diamonddev.libgenetics.common.api.LibGeneticsEntrypointApi;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileWrapper;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionResourceManager;
 import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacketRegistry;
@@ -10,18 +13,21 @@ import net.diamonddev.libgenetics.core.GeneticsMod;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
+import java.util.ArrayList;
+
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
 public class LibGeneticsCommand {
 
-    private static final String RESOURCE_LISTENER_ID = "resource_listener_id";
+    public static final ArrayList<ArgumentBuilder<ServerCommandSource, ?>> EXTERNAL_BRANCHES = new ArrayList<>();
 
+    private static final String RESOURCE_LISTENER_ID = "resource_listener_id";
     private static final String CONFIG_ID = "config_id";
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(
-                literal("libgenetics").requires(scs -> scs.hasPermissionLevel(GeneticsMod.LIBGENETICS_CONFIG.libgeneticsCommandPermissionLevel))
+        LiteralArgumentBuilder<ServerCommandSource> argBuilder =
+                literal("libgenetics").requires(scs -> scs.hasPermissionLevel(GeneticsMod.LIBGENETICS_CONFIG.libGeneticsCommandConfig.permissionLevel))
                         .then(literal("getcache")
 
                                 .then(argument(RESOURCE_LISTENER_ID, CognitionResourceManagerArgument.resourceManager())
@@ -47,8 +53,16 @@ public class LibGeneticsCommand {
                                 .then(literal("printouttest")
                                         .executes(LibGeneticsCommand::exeDevHardcodedPrintoutTest)
                                 )
-                        )
-        );
+                        );
+
+        if (GeneticsMod.LIBGENETICS_CONFIG.libGeneticsCommandConfig.allowCustomBranches) {
+            GeneticsMod.ENTRYPOINT_APIS.forEach((entrypointContainer) -> {
+                LibGeneticsEntrypointApi entrypoint = entrypointContainer.getEntrypoint();
+                entrypoint.addLibGeneticsCommandBranches(argBuilder, EXTERNAL_BRANCHES);
+            });
+        }
+
+        dispatcher.register(argBuilder);
     }
 
     private static int exeGetNervePacketRegistry(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {

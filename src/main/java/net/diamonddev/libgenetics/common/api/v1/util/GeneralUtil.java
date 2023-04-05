@@ -25,4 +25,7 @@ public class GeneralUtil {
 
         return remapped;
     }
+    public static <O, N> ArrayList<N> remapArrayList(ArrayList<O> arrayList, ReturnableConsumer<N, O> remapper) {
+        return toArrList(remapCollection(arrayList, remapper));
+    }
 }

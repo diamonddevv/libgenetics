@@ -32,7 +32,7 @@ public class ChromosomeConfigFileWrapper {
         for (String directory : filePathParts) {
             if (pl > 1) {
                 amendPath.append(directory);
-                new File(amendPath.toString()).mkdir();
+                var thisIsHereToGetRidOfTheWarningNoOtherReason = new File(amendPath.toString()).mkdir();
                 amendPath.append("/");
                 pl--;
             }
@@ -58,6 +58,7 @@ public class ChromosomeConfigFileWrapper {
                         json.add(key, expectedJson.get(key));
                     }
                 }
+
                 toPrint = json;
             } else {
                 toPrint = expectedJson;
@@ -78,7 +79,7 @@ public class ChromosomeConfigFileWrapper {
 
             return returnedJson;
         } catch (IOException e) {
-            throw new RuntimeException("Malformed JSON Config File at '" + path + "'");
+            throw new RuntimeException("Malformed JSON Config File of serializer class '" + readClass + "' at '" + path + "'");
         }
     }
 
@@ -104,6 +105,6 @@ public class ChromosomeConfigFileWrapper {
 
     public String getPath() {
         String path = FabricLoaderImpl.INSTANCE.getConfigDir() + "/" + filename;
-        return path.replace('\\', '/'); // correct path
+        return path.replace('\\', '/'); // correct path because oPeRaTiNg SyStEmS aRe WeIrD sOmEtImEs
     }
 }

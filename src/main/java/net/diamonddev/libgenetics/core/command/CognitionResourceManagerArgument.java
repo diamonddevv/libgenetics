@@ -37,10 +37,6 @@ public class CognitionResourceManagerArgument extends StringArrayListArgType {
     }
     @Override
     public ArrayList<String> getArray() {
-        return GeneralUtil.toArrList(CognitionDataListener.listeners.stream().map(CognitionResourceManagerArgument::remapListeners).toList());
-    }
-
-    private static String remapListeners(CognitionDataListener listener) {
-        return listener.getFabricId().toString();
+        return GeneralUtil.remapArrayList(CognitionDataListener.listeners, (listener) -> listener.getFabricId().toString());
     }
 }

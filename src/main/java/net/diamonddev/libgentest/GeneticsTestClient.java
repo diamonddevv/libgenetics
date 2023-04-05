@@ -5,7 +5,6 @@ import net.diamonddev.libgenetics.core.GeneticsMod;
 
 public class GeneticsTestClient {
     public static void testInit() {
-
         NervePacketRegistry.initClientS2CReciever(GeneticsMod.id("test_packet"));
     }
 }
