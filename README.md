@@ -1,7 +1,9 @@
 # libgenetics
 Minecraft Fabric/Quilt 1.19.x Library Mod, made by DiamondDev
 
-no guarantees this'll work yet
+LibGenetics adds several helpful classes and utilities, along with a few named specialised packages such as Nerve (Networking) or Cognition (Server Data/Client Resource Loading).
+
+The library uses GitHub commit hashes for versions. You can find a Python script on Replit to get the most recent hash on my website, or simply get it from the recent commits here.
 
 # Add to Project
 ## Repository Block (`build.gradle`)
