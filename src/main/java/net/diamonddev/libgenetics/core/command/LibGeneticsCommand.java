@@ -5,7 +5,7 @@ import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.diamonddev.libgenetics.common.api.LibGeneticsEntrypointApi;
+import net.diamonddev.libgenetics.common.api.LibGeneticsApi;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileWrapper;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionResourceManager;
 import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacketRegistry;
@@ -57,7 +57,7 @@ public class LibGeneticsCommand {
 
         if (GeneticsMod.LIBGENETICS_CONFIG.libGeneticsCommandConfig.allowCustomBranches) {
             GeneticsMod.ENTRYPOINT_APIS.forEach((entrypointContainer) -> {
-                LibGeneticsEntrypointApi entrypoint = entrypointContainer.getEntrypoint();
+                LibGeneticsApi entrypoint = entrypointContainer.getEntrypoint();
                 entrypoint.addLibGeneticsCommandBranches(argBuilder, EXTERNAL_BRANCHES);
             });
         }

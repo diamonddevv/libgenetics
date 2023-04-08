@@ -1,5 +1,6 @@
 package net.diamonddev.libgentest;
 
+import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacket;
 import net.diamonddev.libgenetics.common.api.v1.network.nerve.NerveS2CPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -9,7 +10,7 @@ public class TestPacket implements NerveS2CPacket<TestPacket, TestPacket.TestPac
 
     @Override
     public PacketByteBuf write(TestPacketData data) {
-        PacketByteBuf buf = getNewBuf();
+        PacketByteBuf buf = NervePacket.getNewBuf();
 
         buf.writeString(data.payload);
 

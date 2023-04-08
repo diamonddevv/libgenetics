@@ -1,7 +1,7 @@
 package net.diamonddev.libgenetics.core;
 
 import com.google.gson.annotations.SerializedName;
-import net.diamonddev.libgenetics.common.api.LibGeneticsEntrypointApi;
+import net.diamonddev.libgenetics.common.api.LibGeneticsApi;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFile;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileRegistry;
 import net.diamonddev.libgenetics.core.command.ChromosomeConfigFileIdentifierArgument;
@@ -28,7 +28,7 @@ public class GeneticsMod implements ModInitializer {
 	public static LibGeneticsConfig LIBGENETICS_CONFIG;
 
 	private static final String ENTRYPOINT = "libgenetics";
-	public static List<EntrypointContainer<LibGeneticsEntrypointApi>> ENTRYPOINT_APIS;
+	public static List<EntrypointContainer<LibGeneticsApi>> ENTRYPOINT_APIS;
 
 	@Override
 	public void onInitialize() {
@@ -61,8 +61,8 @@ public class GeneticsMod implements ModInitializer {
 		return LIBGENETICS_CONFIG.devConfig.hasDevTests;
 	}
 
-	private static List<EntrypointContainer<LibGeneticsEntrypointApi>> loadEntrypoints() {
-		return FabricLoader.getInstance().getEntrypointContainers(ENTRYPOINT, LibGeneticsEntrypointApi.class);
+	private static List<EntrypointContainer<LibGeneticsApi>> loadEntrypoints() {
+		return FabricLoader.getInstance().getEntrypointContainers(ENTRYPOINT, LibGeneticsApi.class);
 	}
 
 	public static class LibGeneticsConfig implements ChromosomeConfigFile {

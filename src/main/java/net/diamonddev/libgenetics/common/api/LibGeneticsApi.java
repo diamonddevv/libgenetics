@@ -8,12 +8,13 @@ import net.minecraft.server.command.ServerCommandSource;
 import java.util.ArrayList;
 
 
-public interface LibGeneticsEntrypointApi {
+public interface LibGeneticsApi {
 
     /**
      * Used to add new branches to the LibGenetics command.
      * @see LibGeneticsCommand
      */
-    void addLibGeneticsCommandBranches(LiteralArgumentBuilder<ServerCommandSource> root, ArrayList<ArgumentBuilder<ServerCommandSource, ?>> branches);
+    default void addLibGeneticsCommandBranches(LiteralArgumentBuilder<ServerCommandSource> root, ArrayList<ArgumentBuilder<ServerCommandSource, ?>> branches) {
 
+    }
 }

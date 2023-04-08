@@ -25,11 +25,21 @@
     ],
     "mm:early_risers": [
       "net.diamonddev.libgenetics.core.asm.EarlyRiser"
+    ],
+
+    "libgenetics": [
+      "net.diamonddev.libgentest.Api"
     ]
   },
   "mixins": [
     "genetics.mixins.json"
   ],
+
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
+  },
 
   "depends": {
     "fabricloader": ">=0.14.9",

@@ -11,7 +11,7 @@ import net.minecraft.network.PacketByteBuf;
  */
 public interface NervePacket<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> {
 
-    default PacketByteBuf getNewBuf() {
+    static PacketByteBuf getNewBuf() {
         return PacketByteBufs.create();
     }
 
