@@ -18,7 +18,7 @@ public interface NervePacket<T extends NervePacket<T, D>, D extends NervePacket.
     PacketByteBuf write(D data);
     D read(PacketByteBuf buf);
 
-    NerveNetworker.Pathway getPathway();
+    Pathway getPathway();
 
-    class NervePacketData {}
+    interface NervePacketData {}
 }

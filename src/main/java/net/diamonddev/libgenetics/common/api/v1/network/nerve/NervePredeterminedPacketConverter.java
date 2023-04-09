@@ -7,18 +7,34 @@ import net.minecraft.util.Identifier;
 
 public class NervePredeterminedPacketConverter {
 
-    public static <S extends Serializer<D>, D extends Data> NerveCompatibleConvertedPacket<S, D> createConvertedPacket(
-            Identifier channel, NerveNetworker.Pathway pathway, S serializer) {
+    public static <
+            S extends Serializer<D>,
+            D extends Data>
+    NerveCompatibleConvertedPacket<S, D>
+    createConvertedPacket(Identifier channel, Pathway pathway, S serializer) {
+
         return new NerveCompatibleConvertedPacket<>(channel, pathway, serializer);
     }
 
+    public static <S extends Serializer<D>, D extends Data> void registerClientPacketListener(NerveCompatibleConvertedPacket<S, D> convertedPacket) {
+        if (convertedPacket.pathway == Pathway.S2C) {
+            ClientPlayNetworking.registerGlobalReceiver(convertedPacket.channel, convertedPacket.receiveClient());
+        } else NerveCompatibleConvertedPacket.throwPathwayException(Pathway.other(Pathway.S2C));
+    }
+    public static <S extends Serializer<D>, D extends Data> void registerServerPacketListener(NerveCompatibleConvertedPacket<S, D> convertedPacket) {
+        if (convertedPacket.pathway == Pathway.C2S) {
+            ServerPlayNetworking.registerGlobalReceiver(convertedPacket.channel, convertedPacket.receiveServer());
+        } else NerveCompatibleConvertedPacket.throwPathwayException(Pathway.other(Pathway.C2S));
+    }
+
     public static class NerveCompatibleConvertedPacket<S extends Serializer<D>, D extends Data> {
+
+
         private final Identifier channel;
-        private final NerveNetworker.Pathway pathway;
+        private final Pathway pathway;
         private final S serializer;
 
-        private NerveCompatibleConvertedPacket(Identifier channel, NerveNetworker.Pathway pathway, S serializer) {
-
+        private NerveCompatibleConvertedPacket(Identifier channel, Pathway pathway, S serializer) {
             this.channel = channel;
             this.pathway = pathway;
             this.serializer = serializer;
@@ -29,7 +45,7 @@ public class NervePredeterminedPacketConverter {
             return channel;
         }
 
-        public NerveNetworker.Pathway getPathway() {
+        public Pathway getPathway() {
             return pathway;
         }
 
@@ -41,13 +57,19 @@ public class NervePredeterminedPacketConverter {
         public ClientPlayNetworking.PlayChannelHandler receiveClient() {
             if (serializer instanceof S2CSerializer<?> s2c) {
                 return s2c.receive();
-            } else throw new NerveNetworkingException("This packet is not received on the server!");
+            } else throwPathwayException(Pathway.other(Pathway.S2C));
+            return null;
         }
-
         public ServerPlayNetworking.PlayChannelHandler receiveServer() {
             if (serializer instanceof C2SSerializer<?> c2s) {
                 return c2s.receive();
-            } else throw new NerveNetworkingException("This packet is not received on the client!");
+            } else throwPathwayException(Pathway.other(Pathway.C2S));
+            return null;
+        }
+
+        public static void throwPathwayException(Pathway pathway) {
+            String s = pathway == Pathway.C2S ? "client" : "server";
+            throw new NerveNetworkingException("This packet is not received on the " + s + "!");
         }
     }
 
@@ -64,5 +86,5 @@ public class NervePredeterminedPacketConverter {
         D read(PacketByteBuf buf);
     }
 
-    public interface Data {}
+    public interface Data extends NervePacket.NervePacketData {}
 }

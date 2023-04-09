@@ -85,6 +85,6 @@ public class NervePacketRegistry<T extends NervePacket<T, D>, D extends NervePac
         }
     }
 
-    public record NervePacketRegistryEntry<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData>(Identifier channel, NervePacket<T, D> packet) {
-    }
+    public record NervePacketRegistryEntry<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData>(
+            Identifier channel, NervePacket<T, D> packet) {}
 }

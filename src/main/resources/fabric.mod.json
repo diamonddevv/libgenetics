@@ -25,10 +25,6 @@
     ],
     "mm:early_risers": [
       "net.diamonddev.libgenetics.core.asm.EarlyRiser"
-    ],
-
-    "libgenetics": [
-      "net.diamonddev.libgentest.Api"
     ]
   },
   "mixins": [

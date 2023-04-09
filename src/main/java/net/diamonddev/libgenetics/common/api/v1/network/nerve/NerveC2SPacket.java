@@ -6,8 +6,8 @@ import net.minecraft.util.Identifier;
 
 public interface NerveC2SPacket<T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> extends NervePacket<T, D> {
     @Override
-    default NerveNetworker.Pathway getPathway() {
-        return NerveNetworker.Pathway.C2S;
+    default Pathway getPathway() {
+        return Pathway.C2S;
     }
 
     ServerPlayNetworking.PlayChannelHandler receive(Identifier channel);

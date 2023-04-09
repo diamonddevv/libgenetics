@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 public class NerveNetworker {
@@ -14,12 +13,7 @@ public class NerveNetworker {
      * I called it Nerve, after the Nervous System in living creatures, much how the whole API is named after the foundations of life.
      */
 
-    public enum Pathway {
-        S2C,
-        C2S;
-    }
-
-    private static void send(NerveNetworker.Pathway pathway, @Nullable ServerPlayerEntity serverPlayer, Identifier channel, PacketByteBuf buf) {
+    private static void send(Pathway pathway, @Nullable ServerPlayerEntity serverPlayer, Identifier channel, PacketByteBuf buf) {
         switch (pathway) {
             case C2S -> ClientPlayNetworking.send(channel, buf);
             case S2C -> ServerPlayNetworking.send(serverPlayer, channel, buf);
@@ -32,7 +26,7 @@ public class NerveNetworker {
         send(entry.packet().getPathway(), serverPlayer, entry.channel(), entry.packet().write(data));
     }
 
-    @ApiStatus.Experimental
+
     public static <S extends NervePredeterminedPacketConverter.Serializer<D>,
             D extends NervePredeterminedPacketConverter.Data> void send(@Nullable ServerPlayerEntity serverPlayer,
                                                                         NervePredeterminedPacketConverter.NerveCompatibleConvertedPacket<S, D> convertedPacket,
