@@ -27,6 +27,10 @@ public class CognitionDataResource {
         return type;
     }
 
+    public Identifier getId() {
+        return id;
+    }
+
     // getAsXYZ()
     public HashMap<String, JsonElement> getHash() {
         return objHash;
