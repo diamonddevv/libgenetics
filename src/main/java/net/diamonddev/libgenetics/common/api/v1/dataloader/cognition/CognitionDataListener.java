@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 public abstract class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
 
@@ -66,6 +67,9 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
 
     public abstract void onReloadForEachResource(CognitionDataResource resource, Identifier path);
     public abstract void onFinishReload();
+    public Function<CognitionDataResource, Boolean> forEachShouldExclude() {
+        return resource -> false;
+    }
 
 
     private static final Gson gson = new Gson();
@@ -96,16 +100,20 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
                     // Read JSON
                     CognitionDataResource resource = new CognitionDataResource(type, id);
 
-                    // Add keys
-                    ArrayList<String> jsonKeys = new ArrayList<>();
-                    type.addJsonKeys(jsonKeys);
-                    jsonKeys.forEach(s -> resource.getHash().put(s, json.get(s)));
+                    boolean shouldAdd = forEachShouldExclude().apply(resource);
 
-                    // Add
-                    this.getManager().CACHE.getOrCreateKey(type).add(resource);
+                    if (shouldAdd) {
+                        // Add keys
+                        ArrayList<String> jsonKeys = new ArrayList<>();
+                        type.addJsonKeys(jsonKeys);
+                        jsonKeys.forEach(s -> resource.getHash().put(s, json.get(s)));
 
-                    // CognitionDataListener#onReloadForEachResource()
-                    onReloadForEachResource(resource, id);
+                        // Add
+                        this.getManager().CACHE.getOrCreateKey(type).add(resource);
+
+                        // CognitionDataListener#onReloadForEachResource()
+                        onReloadForEachResource(resource, id);
+                    }
 
                 } catch (Exception e) {
                     RESOURCE_MANAGER_LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
