@@ -1,6 +1,7 @@
 package net.diamonddev.libgenetics.common.api.v1.network.nerve;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -12,6 +13,9 @@ public class NerveNetworker {
      * LibGenetics Networking API.
      * I called it Nerve, after the Nervous System in living creatures, much how the whole API is named after the foundations of life.
      */
+    public static PacketByteBuf getNewBuf() {
+        return PacketByteBufs.create();
+    }
 
     private static void send(Pathway pathway, @Nullable ServerPlayerEntity serverPlayer, Identifier channel, PacketByteBuf buf) {
         switch (pathway) {

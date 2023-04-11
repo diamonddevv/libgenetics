@@ -13,6 +13,28 @@ public class NervePacketRegistry<T extends NervePacket<T, D>, D extends NervePac
     public static HashMap<Identifier, NervePacketRegistryEntry<?, ?>> getRegistryHash() {
         return REGISTRY_HASH;
     }
+
+    public static String getStringMappedHash() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        int i = getRegistryHash().size();
+        for (Identifier id : getRegistryHash().keySet()) {
+            builder.append("\"").append(id).append("\"=[");
+            NervePacketRegistryEntry<?, ?> packet = getRegistryHash().get(id);
+            builder.append("packet=").append(packet.packet.toString()).append(",");
+            builder.append("pathway=").append(packet.packet.getPathway()).append(",");
+            builder.append("channel=").append(packet.channel).append("]");
+
+            i--;
+            if (i != 0) {
+                builder.append(",");
+            }
+        }
+        builder.append("]");
+
+        return builder.toString();
+    }
+
     public static <T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> NervePacketRegistryEntry<T, D> register(Identifier reference, NervePacketRegistryEntry<T, D> entry) {
         REGISTRY_HASH.put(reference, entry);
         return entry;

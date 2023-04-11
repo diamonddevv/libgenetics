@@ -7,6 +7,8 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.diamonddev.libgenetics.common.api.LibGeneticsApi;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileWrapper;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionDataListener;
+import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionRegistry;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionResourceManager;
 import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacketRegistry;
 import net.diamonddev.libgenetics.core.GeneticsMod;
@@ -44,9 +46,15 @@ public class LibGeneticsCommand {
                                         )
                                 )
 
-                        ).then(literal("nerve")
-                                .then(literal("getregistry")
-                                        .executes(LibGeneticsCommand::exeGetNervePacketRegistry)
+                        ).then(literal("modules")
+                                .then(literal("nerve")
+                                        .then(literal("getregistry")
+                                                .executes(LibGeneticsCommand::exeGetNervePacketRegistry)
+                                        )
+                                ).then(literal("cognition")
+                                        .then(literal("getregistry")
+                                                .executes(LibGeneticsCommand::exeGetCognitionListenerRegistry)
+                                        )
                                 )
 
                         ).then(literal("devtools").requires(src -> GeneticsMod.hasDevTools())
@@ -65,8 +73,14 @@ public class LibGeneticsCommand {
         dispatcher.register(argBuilder);
     }
 
+    private static int exeGetCognitionListenerRegistry(CommandContext<ServerCommandSource> context) {
+        String s = CognitionRegistry.getStringMappedRegistry();
+        context.getSource().sendFeedback(Text.literal(s), false);
+        return 1;
+    }
+
     private static int exeGetNervePacketRegistry(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        String s = NervePacketRegistry.getRegistryHash().toString();
+        String s = NervePacketRegistry.getStringMappedHash();
         context.getSource().sendFeedback(Text.literal(s), false);
         return 1;
     }

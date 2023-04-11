@@ -17,14 +17,10 @@ public class CognitionResourceManager {
 
     private final HashMap<Identifier, CognitionResourceType> TYPES = new HashMap<>();
 
-    ///
     public void registerType(CognitionResourceType type) {
         TYPES.put(type.getId(), type);
     }
-    
-    public static <T> void registerType(CognitionDataListener listener, CognitionResourceType type) {
-        listener.getManager().registerType(type);
-    }
+    ///
 
     public CognitionResourceType getType(Identifier typeId) {
         return TYPES.get(typeId);
@@ -34,9 +30,6 @@ public class CognitionResourceManager {
         CACHE.get(type).forEach(consumer);
     }
 
-    public static <T> void forEachResource(CognitionDataListener listener, CognitionResourceType type, Consumer<CognitionDataResource> consumer) {
-        listener.getManager().forEachResource(type, consumer);
-    }
     //
     public static final String IDPARAM = "resource_type";
 }

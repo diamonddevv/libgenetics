@@ -20,8 +20,8 @@ import java.util.function.Function;
 public abstract class CognitionDataListener implements SimpleSynchronousResourceReloadListener {
 
     /*
-        This is the reabstraction of the Absract Recipe Loader from my mod Dialabs. It is a system that removes the need for making new data listeners and instead can
-        load many from one JSON location, into a JSON Object parsable with Java.
+        This is the re-abstraction of the Abstract Recipe Loader from my mod Dialabs. It is a system that removes the need for making new data listeners and instead can
+        load many from one JSON location, into a JSON Object parse-able with Java.
      */
 
     private final Logger RESOURCE_MANAGER_LOGGER;
@@ -29,7 +29,7 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
     private final CognitionResourceManager manager;
     private final String resourcePath;
     private final Identifier id;
-    private final ResourceType restype;
+    final ResourceType restype;
 
     public CognitionDataListener(String managerName, Identifier id) {
         this(managerName, id, ResourceType.SERVER_DATA);
@@ -54,19 +54,13 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
         this.manager = new CognitionResourceManager();
     }
 
-    public static ArrayList<CognitionDataListener> listeners = new ArrayList<>();
-
-    public static void registerListener(CognitionDataListener listener) {
-        listeners.add(listener);
-        ResourceManagerHelper.get(listener.restype).registerReloadListener(listener);
-    }
-
     public CognitionResourceManager getManager() {
         return this.manager;
     }
 
     public abstract void onReloadForEachResource(CognitionDataResource resource, Identifier path);
     public abstract void onFinishReload();
+    public abstract void onClearCachePhase();
     public Function<CognitionDataResource, Boolean> forEachShouldExclude() {
         return resource -> false;
     }
@@ -83,6 +77,7 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
     public void reload(ResourceManager manager) {
         // Clear Cache
         this.getManager().CACHE.clear();
+        this.onClearCachePhase();
 
 
         // Read
