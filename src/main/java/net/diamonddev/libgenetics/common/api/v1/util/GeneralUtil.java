@@ -6,6 +6,7 @@ import net.minecraft.registry.tag.TagKey;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Function;
 
 public class GeneralUtil {
     public static <T> boolean isInTag(TagKey<T> tag, T object) {
@@ -16,16 +17,16 @@ public class GeneralUtil {
     public static <T> ArrayList<T> toArrList(Collection<T> collection) {
         return new ArrayList<>(collection);
     }
-    public static <O, N> Collection<N> remapCollection(Collection<O> collection, ReturnableConsumer<N, O> remapFunction) {
+    public static <O, N> Collection<N> remapCollection(Collection<O> collection, Function<O, N> remapFunction) {
         Collection<N> remapped = new ArrayList<>();
         collection.forEach(o -> {
-            N n = remapFunction.accept(o);
+            N n = remapFunction.apply(o);
             remapped.add(n);
         });
 
         return remapped;
     }
-    public static <O, N> ArrayList<N> remapArrayList(ArrayList<O> arrayList, ReturnableConsumer<N, O> remapper) {
+    public static <O, N> ArrayList<N> remapArrayList(ArrayList<O> arrayList, Function<O, N> remapper) {
         return toArrList(remapCollection(arrayList, remapper));
     }
 }
