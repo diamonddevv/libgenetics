@@ -1,6 +1,5 @@
 package net.diamonddev.libgenetics.common.api.v1.network.nerve;
 
-import net.diamonddev.libgenetics.common.api.v1.util.VoidFunction;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -37,19 +36,5 @@ public class NerveNetworker {
                                                                         NervePredeterminedPacketConverter.NerveCompatibleConvertedPacket<S, D> convertedPacket,
                                                                         D data) {
         send(convertedPacket.getPathway(), serverPlayer, convertedPacket.getChannel(), convertedPacket.getSerializer().write(data));
-    }
-
-    public static <T extends NervePacket<T, D>, D extends NervePacket.NervePacketData> void send(@Nullable ServerPlayerEntity serverPlayer,
-                                                                                                 NervePacketRegistry.NervePacketRegistryEntry<T, D> entry,
-                                                                                                 VoidFunction<D> data) {
-        send(entry.packet().getPathway(), serverPlayer, entry.channel(), entry.packet().write(data.apply()));
-    }
-
-
-    public static <S extends NervePredeterminedPacketConverter.Serializer<D>,
-            D extends NervePredeterminedPacketConverter.Data> void send(@Nullable ServerPlayerEntity serverPlayer,
-                                                                        NervePredeterminedPacketConverter.NerveCompatibleConvertedPacket<S, D> convertedPacket,
-                                                                        VoidFunction<D> data) {
-        send(convertedPacket.getPathway(), serverPlayer, convertedPacket.getChannel(), convertedPacket.getSerializer().write(data.apply()));
     }
 }
