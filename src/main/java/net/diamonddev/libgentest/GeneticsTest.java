@@ -1,9 +1,13 @@
 package net.diamonddev.libgentest;
 
 
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFile;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileRegistry;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer.ConfigSerializer;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer.JsonConfigSerializer;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer.PropertiesConfigSerializer;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionDataListener;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionDataResource;
-import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionRegistry;
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionResourceType;
 import net.diamonddev.libgenetics.common.api.v1.network.nerve.*;
 import net.diamonddev.libgenetics.core.GeneticsMod;
@@ -83,9 +87,45 @@ public class GeneticsTest {
     public static final TestType type = new TestType();
     public static NervePacketRegistry.NervePacketRegistryEntry<TestPacket, TestPacket.Data> packet;
 
+    public static class TestJsonConfig implements ChromosomeConfigFile {
+
+        @Override
+        public String getFilePathFromConfigDirectory() {
+            return "testdata/json.json";
+        }
+
+        @Override
+        public ConfigSerializer getSerializer() {
+            return new JsonConfigSerializer();
+        }
+
+        public boolean aBoolean = true;
+        public int anInt = 5;
+    }
+    public static class TestPropsConfig implements ChromosomeConfigFile {
+
+        @Override
+        public String getFilePathFromConfigDirectory() {
+            return "testdata/props.properties";
+        }
+
+        @Override
+        public ConfigSerializer getSerializer() {
+            return new PropertiesConfigSerializer();
+        }
+
+        public boolean aBoolean = true;
+        public int anInt = 5;
+    }
+    public static TestJsonConfig json;
+    public static TestPropsConfig props;
+
     public static void testInit() {
-        CognitionRegistry.registerListener(listener);
-        listener.getManager().registerType(type);
-        packet = NervePacketRegistry.register(GeneticsMod.id("test_packet"), new TestPacket());
+//        CognitionRegistry.registerListener(listener);
+//        listener.getManager().registerType(type);
+//        packet = NervePacketRegistry.register(GeneticsMod.id("test_packet"), new TestPacket());
+
+        //json = ChromosomeConfigFileRegistry.registerAndReadAsSelf(GeneticsMod.id("json"), new TestJsonConfig(), TestJsonConfig.class);
+        //props = ChromosomeConfigFileRegistry.registerAndReadAsSelf(GeneticsMod.id("props"), new TestPropsConfig(), TestPropsConfig.class);
     }
 }

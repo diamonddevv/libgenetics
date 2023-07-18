@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import net.diamonddev.libgenetics.common.api.LibGeneticsApi;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFile;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFileRegistry;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer.ConfigSerializer;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer.JsonConfigSerializer;
 import net.diamonddev.libgenetics.core.command.ChromosomeConfigFileIdentifierArgument;
 import net.diamonddev.libgenetics.core.command.CognitionResourceManagerArgument;
 import net.diamonddev.libgenetics.core.command.LibGeneticsCommand;
@@ -69,6 +71,11 @@ public class GeneticsMod implements ModInitializer {
 		@Override
 		public String getFilePathFromConfigDirectory() {
 			return ".diamonddev/libgenetics.json";
+		}
+
+		@Override
+		public ConfigSerializer getSerializer() {
+			return new JsonConfigSerializer();
 		}
 
 		@SerializedName("libGeneticsCommand")

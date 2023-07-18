@@ -1,5 +1,6 @@
 package net.diamonddev.libgenetics.core.command;
 
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
@@ -12,10 +13,16 @@ import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionRe
 import net.diamonddev.libgenetics.common.api.v1.dataloader.cognition.CognitionResourceManager;
 import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacketRegistry;
 import net.diamonddev.libgenetics.core.GeneticsMod;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.impl.FabricLoaderImpl;
+import net.fabricmc.loader.impl.ModContainerImpl;
+import net.minecraft.SharedConstants;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
@@ -73,15 +80,17 @@ public class LibGeneticsCommand {
         dispatcher.register(argBuilder);
     }
 
+
+
     private static int exeGetCognitionListenerRegistry(CommandContext<ServerCommandSource> context) {
         String s = CognitionRegistry.getStringMappedRegistry();
-        context.getSource().sendFeedback(Text.literal(s), false);
+        context.getSource().sendFeedback(() -> Text.literal(s), false);
         return 1;
     }
 
     private static int exeGetNervePacketRegistry(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         String s = NervePacketRegistry.getStringMappedHash();
-        context.getSource().sendFeedback(Text.literal(s), false);
+        context.getSource().sendFeedback(() -> Text.literal(s), false);
         return 1;
     }
 
@@ -91,19 +100,19 @@ public class LibGeneticsCommand {
 
     private static int exeGetConfigFilePath(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ChromosomeConfigFileWrapper config = ChromosomeConfigFileIdentifierArgument.getConfigJson(context, CONFIG_ID);
-        context.getSource().sendFeedback(Text.literal(config.getPath()), false);
+        context.getSource().sendFeedback(() -> Text.literal(ChromosomeConfigFileWrapper.getPath(config.filename)), false);
         return 1;
     }
 
     private static int exeGetConfigFileJson(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         ChromosomeConfigFileWrapper config = ChromosomeConfigFileIdentifierArgument.getConfigJson(context, CONFIG_ID);
-        context.getSource().sendFeedback(Text.literal(config.readNoFileManagement().toString()), false);
+        context.getSource().sendFeedback(() -> Text.literal(config.readNoFileManagement(JsonObject.class).toString()), false);
         return 1;
     }
 
     private static int exeGetResourceCache(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
         CognitionResourceManager manager = CognitionResourceManagerArgument.getManager(context, RESOURCE_LISTENER_ID);
-        context.getSource().sendFeedback(Text.literal(manager.CACHE.toString()), true);
+        context.getSource().sendFeedback(() -> Text.literal(manager.CACHE.toString()), true);
         return 1;
     }
 }

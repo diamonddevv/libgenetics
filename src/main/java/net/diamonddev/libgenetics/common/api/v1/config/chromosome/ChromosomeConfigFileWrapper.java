@@ -1,18 +1,19 @@
 package net.diamonddev.libgenetics.common.api.v1.config.chromosome;
 
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
+import net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer.ConfigSerializer;
+import net.diamonddev.libgenetics.common.api.v1.util.Pair;
 import net.fabricmc.loader.impl.FabricLoaderImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ChromosomeConfigFileWrapper {
 
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    private final String filename;
+    public final String filename;
     private final Logger logger;
     private final ChromosomeConfigFile config;
 
@@ -23,79 +24,38 @@ public class ChromosomeConfigFileWrapper {
     }
 
     public <T> T read(Class<T> readClass) {
-
-        String path = getPath();
-
-        StringBuilder amendPath = new StringBuilder(); // create required directories because im weird
-        String[] filePathParts = path.split("/");
-        int pl = filePathParts.length;
-        for (String directory : filePathParts) {
-            if (pl > 1) {
-                amendPath.append(directory);
-                var thisIsHereToGetRidOfTheWarningNoOtherReason = new File(amendPath.toString()).mkdir();
-                amendPath.append("/");
-                pl--;
-            }
-        }
-
         try {
-            boolean created = false;
-            File file = new File(path);
-            if (file.createNewFile()) {
-                logger.info("Created Config File at {}", file);
-                created = true;
-            }
+            ConfigSerializer serializer = this.config.getSerializer();
 
-            FileReader fileReader = new FileReader(file);
 
-            JsonObject expectedJson = gson.toJsonTree(config, readClass).getAsJsonObject();
-            JsonObject json = gson.fromJson(fileReader, JsonObject.class);
+            Pair<File, Boolean> paired = serializer.fetchAndCreateFileIfNeeded(config, readClass);
+            File file = paired.getLeft();
 
-            JsonObject toPrint;
-            if (json != null) {
-                for (String key : expectedJson.keySet()) {
-                    if (!json.has(key)) {
-                        json.add(key, expectedJson.get(key));
-                    }
-                }
+            FileReader reader = new FileReader(file);
+            T returned = serializer.readFileToClass(this.config, readClass, reader);
+            reader.close();
 
-                toPrint = json;
-            } else {
-                toPrint = expectedJson;
-            }
+            FileWriter writer = new FileWriter(file);
+            reader = new FileReader(file);
 
-            FileWriter fileWriter = new FileWriter(file);
-            fileWriter.flush();
+            if (paired.getRight()) serializer.writeClassToFile(config, readClass, writer, reader);
 
-            fileWriter.write(gson.toJson(JsonParser.parseString(toPrint.toString())));
+            reader.close();
+            writer.close();
 
-            T returnedJson = gson.fromJson(json, readClass);
+            if (paired.getRight()) returned = readNoFileManagement(readClass);
 
-            fileWriter.flush();
-            fileReader.close();
-            fileWriter.close();
+            return returned;
 
-            if (created) returnedJson = readNoFileManagement(readClass);
-
-            return returnedJson;
         } catch (IOException e) {
-            throw new RuntimeException("Malformed JSON Config File of serializer class '" + readClass + "' at '" + path + "'");
+            throw new RuntimeException("Malformed Config File of serializer class '" + this.config.getSerializer().getClass() + "' at '" + getPath(this.filename) + "' (Something went wrong)");
         }
     }
 
-    public JsonObject read() {
-        return read(JsonObject.class);
-    }
-
-    public JsonObject readNoFileManagement() {
-        return readNoFileManagement(JsonObject.class);
-    }
     public <T> T readNoFileManagement(Class<T> clazz) {
-        String path = getPath();
-
         try {
-            JsonReader r = new JsonReader(new FileReader(path));
-            T obj = gson.fromJson(r, clazz);
+            FileReader r = new FileReader(ChromosomeConfigFileWrapper.getPath(config.getFilePathFromConfigDirectory()));
+            T obj = this.config.getSerializer().readFileToClass(this.config, clazz, r);
             r.close();
             return obj;
         } catch (IOException e) {
@@ -103,7 +63,7 @@ public class ChromosomeConfigFileWrapper {
         }
     }
 
-    public String getPath() {
+    public static String getPath(String filename) {
         String path = FabricLoaderImpl.INSTANCE.getConfigDir() + "/" + filename;
         return path.replace('\\', '/'); // correct path because oPeRaTiNg SyStEmS aRe WeIrD sOmEtImEs
     }

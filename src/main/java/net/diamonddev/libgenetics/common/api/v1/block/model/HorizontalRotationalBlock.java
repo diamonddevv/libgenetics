@@ -29,7 +29,7 @@ public abstract class HorizontalRotationalBlock extends HorizontalFacingBlock im
         };
     }
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING, shouldPlaceOpposite() ? ctx.getPlayerFacing().getOpposite() : ctx.getPlayerFacing());
+        return this.getDefaultState().with(FACING, shouldPlaceOpposite() ? ctx.getPlayerLookDirection().getOpposite() : ctx.getPlayerLookDirection());
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
