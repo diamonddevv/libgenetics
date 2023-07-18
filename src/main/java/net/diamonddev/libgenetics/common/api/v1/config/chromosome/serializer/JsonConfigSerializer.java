@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFile;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,9 +25,15 @@ public class JsonConfigSerializer implements ConfigSerializer {
     }
 
     @Override
-    public <T> void writeClassToFile(ChromosomeConfigFile config, Class<T> clazz, FileWriter writer, FileReader reader) throws IOException {
+    public <T> void writeClassToFile(ChromosomeConfigFile config, Class<T> clazz, File file) throws IOException {
+
+        FileReader reader;
+        FileWriter writer;
+
+        reader = new FileReader(file);
         JsonObject expectedJson = gson.toJsonTree(config, clazz).getAsJsonObject();
         JsonObject json = gson.fromJson(reader, JsonObject.class);
+        reader.close();
 
         JsonObject toPrint;
         if (json != null) {
@@ -41,8 +48,10 @@ public class JsonConfigSerializer implements ConfigSerializer {
             toPrint = expectedJson;
         }
 
-        writer.flush();
+
+        writer = new FileWriter(file);
         writer.write(gson.toJson(JsonParser.parseString(toPrint.toString())));
+        writer.close();
     }
 
 }

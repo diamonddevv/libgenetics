@@ -2,6 +2,7 @@ package net.diamonddev.libgenetics.common.api.v1.config.chromosome.serializer;
 
 import net.diamonddev.libgenetics.common.api.v1.config.chromosome.ChromosomeConfigFile;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,7 +39,11 @@ public class PropertiesConfigSerializer implements ConfigSerializer {
     }
 
     @Override
-    public <T> void writeClassToFile(ChromosomeConfigFile config, Class<T> readClass, FileWriter writer, FileReader reader) throws IOException {
+    public <T> void writeClassToFile(ChromosomeConfigFile config, Class<T> readClass, File file) throws IOException {
+
+        FileReader reader;
+        FileWriter writer;
+
         Field[] fields = readClass.getDeclaredFields();
         Properties expectedProps = new Properties();
         Properties actualProps = new Properties();
@@ -54,7 +59,9 @@ public class PropertiesConfigSerializer implements ConfigSerializer {
             e.printStackTrace();
         }
 
+        reader = new FileReader(file);
         actualProps.load(reader);
+        reader.close();
 
         Properties toPrint;
         if (!actualProps.isEmpty()) {
@@ -70,7 +77,8 @@ public class PropertiesConfigSerializer implements ConfigSerializer {
             toPrint = expectedProps;
         }
 
-        writer.flush();
+        writer = new FileWriter(file);
         toPrint.store(writer, "");
+        writer.close();
     }
 }

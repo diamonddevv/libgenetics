@@ -30,22 +30,28 @@ public class ChromosomeConfigFileWrapper {
 
             Pair<File, Boolean> paired = serializer.fetchAndCreateFileIfNeeded(config, readClass);
             File file = paired.getLeft();
+            boolean wasCreated = paired.getRight();
+
+            if (wasCreated) {
+                serializer.writeClassToFile(config, readClass, file);
+            }
 
             FileReader reader = new FileReader(file);
-            T returned = serializer.readFileToClass(this.config, readClass, reader);
+            T readToClass = serializer.readFileToClass(this.config, readClass, reader);
             reader.close();
 
-            FileWriter writer = new FileWriter(file);
-            reader = new FileReader(file);
+            if (readToClass == null) {
+                // delete file, try again
+                logger.warn("Config at path {} was empty, deleting file and attempting to re-create..", getPath(this.filename));
+                if (!file.delete()) {
+                    logger.warn("Deletion of {} failed, crashing..", getPath(filename));
+                    throw new RuntimeException("Failed to delete config file at '"+ getPath(filename) +"' to fix/recreate.");
+                } else {
+                    return read(readClass);
+                }
+            }
 
-            if (paired.getRight()) serializer.writeClassToFile(config, readClass, writer, reader);
-
-            reader.close();
-            writer.close();
-
-            if (paired.getRight()) returned = readNoFileManagement(readClass);
-
-            return returned;
+            return readToClass;
 
         } catch (IOException e) {
             throw new RuntimeException("Malformed Config File of serializer class '" + this.config.getSerializer().getClass() + "' at '" + getPath(this.filename) + "' (Something went wrong)");

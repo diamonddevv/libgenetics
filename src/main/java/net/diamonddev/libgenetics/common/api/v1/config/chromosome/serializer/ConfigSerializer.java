@@ -6,10 +6,10 @@ import net.diamonddev.libgenetics.common.api.v1.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface ConfigSerializer {
     String getExpectedFileExtension();
@@ -41,5 +41,7 @@ public interface ConfigSerializer {
     }
 
     <T> T readFileToClass(ChromosomeConfigFile config, Class<T> readClass, FileReader reader) throws IOException;
-    <T> void writeClassToFile(ChromosomeConfigFile config, Class<T> readClass, FileWriter writer, FileReader reader) throws IOException;
+    <T> void writeClassToFile(ChromosomeConfigFile config, Class<T> readClass, File file) throws IOException;
+
+
 }
