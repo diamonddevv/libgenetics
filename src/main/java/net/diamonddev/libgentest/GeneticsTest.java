@@ -131,11 +131,11 @@ public class GeneticsTest {
     public static TestPropsConfig props;
 
     public static void testInit() {
-        CognitionRegistry.registerListener(listener);
-        listener.getManager().registerType(type);
-
+//        CognitionRegistry.registerListener(listener);
+//        listener.getManager().registerType(type);
+//
 //        packet = NervePacketRegistry.register(GeneticsMod.id("test_packet"), new TestPacket());
-
+//
 //        json = ChromosomeConfigFileRegistry.registerAndReadAsSelf(GeneticsMod.id("json"), new TestJsonConfig(), TestJsonConfig.class);
 //        props = ChromosomeConfigFileRegistry.registerAndReadAsSelf(GeneticsMod.id("props"), new TestPropsConfig(), TestPropsConfig.class);
     }

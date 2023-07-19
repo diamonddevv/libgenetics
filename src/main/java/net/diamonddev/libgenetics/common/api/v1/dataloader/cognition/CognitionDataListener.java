@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.resource.ResourceFinder;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -79,13 +80,10 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
         this.getManager().CACHE.clear();
         this.onClearCachePhase();
 
-        var v = manager.findResources(resourcePath, path -> path.getPath().endsWith(".json")).keySet();
-
-        System.out.println(v.size());
-
         // Read
-        for (Identifier id : v) {
+        for (Identifier id : manager.findResources(resourcePath, path -> path.getPath().endsWith(".json")).keySet()) {
             if (manager.getResource(id).isPresent()) {
+
                 try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                     // Consume stream
                     InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8); // Create Reader
@@ -98,7 +96,7 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
                     // Read JSON
                     CognitionDataResource resource = new CognitionDataResource(type, id);
 
-                    boolean shouldAdd = forEachShouldExclude().apply(resource);
+                    boolean shouldAdd = !forEachShouldExclude().apply(resource);
 
                     if (shouldAdd) {
                         // Add keys
