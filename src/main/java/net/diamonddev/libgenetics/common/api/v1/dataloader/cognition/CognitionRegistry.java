@@ -1,8 +1,6 @@
 package net.diamonddev.libgenetics.common.api.v1.dataloader.cognition;
 
-import net.diamonddev.libgenetics.common.api.v1.network.nerve.NervePacketRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
-import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

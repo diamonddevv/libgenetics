@@ -79,9 +79,12 @@ public abstract class CognitionDataListener implements SimpleSynchronousResource
         this.getManager().CACHE.clear();
         this.onClearCachePhase();
 
+        var v = manager.findResources(resourcePath, path -> path.getPath().endsWith(".json")).keySet();
+
+        System.out.println(v.size());
 
         // Read
-        for (Identifier id : manager.findResources(resourcePath, path -> path.getPath().endsWith(".json")).keySet()) {
+        for (Identifier id : v) {
             if (manager.getResource(id).isPresent()) {
                 try (InputStream stream = manager.getResource(id).get().getInputStream()) {
                     // Consume stream
