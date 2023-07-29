@@ -1,4 +1,4 @@
-package net.diamonddev.libgenetics.common.api.v1.enchantment;
+package net.diamonddev.libgenetics.common.api.v1.util.helper;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;

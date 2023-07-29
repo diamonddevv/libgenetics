@@ -3,6 +3,7 @@ package net.diamonddev.libgenetics.common.api.v1.dataloader.cognition;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class CognitionRegistry {
@@ -16,6 +17,10 @@ public class CognitionRegistry {
 
     public static <T> void forEachResource(CognitionDataListener listener, CognitionResourceType type, Consumer<CognitionDataResource> consumer) {
         listener.getManager().forEachResource(type, consumer);
+    }
+
+    public List<CognitionDataResource> getAllResources(CognitionDataListener listener, CognitionResourceType type) {
+        return listener.getManager().getAllResources(type);
     }
 
     public static void registerListener(CognitionDataListener listener) {

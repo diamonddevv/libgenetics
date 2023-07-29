@@ -4,6 +4,7 @@ import net.diamonddev.libgenetics.common.api.v1.util.KeyedArrayCache;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class CognitionResourceManager {
@@ -28,6 +29,10 @@ public class CognitionResourceManager {
 
     public void forEachResource(CognitionResourceType type, Consumer<CognitionDataResource> consumer) {
         CACHE.get(type).forEach(consumer);
+    }
+
+    public List<CognitionDataResource> getAllResources(CognitionResourceType type) {
+        return CACHE.get(type);
     }
 
     //
