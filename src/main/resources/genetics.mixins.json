@@ -4,8 +4,6 @@
   "package": "net.diamonddev.libgenetics.core.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "EnchantmentTargetMixin",
-    "IngredientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
